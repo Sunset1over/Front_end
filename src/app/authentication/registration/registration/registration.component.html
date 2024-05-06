@@ -1,0 +1,48 @@
+<div class="limiter">
+  <div class="container-login100">
+    <div class="wrap-login100">
+      <form class="login100-form validate-form" [formGroup]="registrationForm" novalidate (ngSubmit)="submit(registrationForm.value)">
+        <input type="text"
+                   id="firstname"
+                   formControlName="firstname"
+        />
+        <div class="exception m-b-5 color-red f-s-8">
+          <span *ngIf="validateControl('firstname')" class="color-red">*Firstname is required</span>
+        </div>
+        <input type= "text"
+                   id="lastname"
+                   formControlName="lastname"
+        />
+        <div class="exception m-b-5 color-red f-s-8">
+          <span *ngIf="validateControl('lastname')" class="color-red">*Lastname is required</span>
+        </div>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+        />
+        <div class="exception m-b-5 color-red f-s-8">
+          <span *ngIf="validateControl('username')" class="color-red">*Username must contain 8 characters long</span>
+        </div>
+        <input type="password"
+                   id="password"
+                   formControlName="password"
+        />
+        <div class="exception m-b-10 color-red f-s-8">
+          <span *ngIf="validateControl('password')" class="color-red">*Password must contain:<br>1)a-z and A-Z<br>2)0-9</span>
+        </div>
+        <input type="email"
+                   id="email"
+                   formControlName="email"
+        />
+        <div class="exception m-b-10 color-red f-s-8">
+          <span *ngIf="validateControl('email')" class="color-red">*Email is incorrect</span>
+        </div>
+        <button type="submit">
+          ok
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
