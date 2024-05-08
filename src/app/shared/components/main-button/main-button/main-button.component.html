@@ -1,0 +1,29 @@
+<button *ngIf="inputParameters.link" [type]="type" [disabled]="disabled" [routerLink]="[inputParameters.link]" class="custom-button" [ngClass]="{
+  default: inputParameters.size === 'default',
+  small: inputParameters.size === 'small',
+  big: inputParameters.size === 'big',
+  red: inputParameters.classes === 'red',
+  green: inputParameters.classes === 'green',
+  yellow: inputParameters.classes === 'yellow',
+  dark: inputParameters.classes === 'dark'
+   }">
+  <div class="inner">
+    <fa-icon [icon]="inputParameters.icon"></fa-icon>
+    <span class="inner-text">{{inputParameters.text}}</span>
+  </div>
+</button>
+
+<button *ngIf="!inputParameters.link" [type]="type" [disabled]="disabled" class="custom-button" [ngClass]="{
+  default: inputParameters.size === 'default',
+  small: inputParameters.size === 'small',
+  big: inputParameters.size === 'big',
+  red: inputParameters.classes === 'red',
+  green: inputParameters.classes === 'green',
+  yellow: inputParameters.classes === 'yellow',
+  dark: inputParameters.classes === 'dark'
+   }">
+  <div class="inner">
+    <fa-icon [icon]="inputParameters.icon"></fa-icon>
+    <span class="inner-text">{{inputParameters.text}}</span>
+  </div>
+</button>

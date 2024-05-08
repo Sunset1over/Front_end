@@ -8,6 +8,10 @@ import {jwtDecode} from "jwt-decode";
 import {AuthenticationRequestModel} from "../../../models/base-models/authenticationRequestModel.interface";
 import {NgIf} from "@angular/common";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
+import {IInput} from "../../../shared/components/input/models/input.interface";
+import {faEye, faUser} from "@fortawesome/free-solid-svg-icons";
+import {InputComponent} from "../../../shared/components/input/input/input.component";
+import {LoginButtonComponent} from "../../../shared/components/login-button/login-button/login-button.component";
 
 @Component({
   selector: 'app-login',
@@ -16,16 +20,33 @@ import {HeaderComponent} from "../../../shared/components/header/header/header.c
     ReactiveFormsModule,
     RouterLink,
     NgIf,
-    HeaderComponent
+    HeaderComponent,
+    InputComponent,
+    LoginButtonComponent
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss', '../../../../styles.scss', '../../../../util.scss'],
   providers: [UserService, CookieService]
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   receivedUser : AuthenticationResponseModel | undefined;
 
+  public loginConfig: IInput = {
+    type: 'default',
+    placeholder: 'Username',
+    isDisabled: false,
+    error:"Error",
+    icon: faUser
+  }
+  public passwordConfig: IInput = {
+    type: 'default',
+    placeholder: 'Password',
+    isDisabled: false,
+    error: "Error",
+    icon: faEye,
+    isChangingType: true
+  }
 
   constructor(private authService: UserService, private CookieService : CookieService, private router: Router) {}
   ngOnInit() {
@@ -81,7 +102,7 @@ export class LoginComponent implements OnInit {
       next: (data: AuthenticationResponseModel) => {
         if (data.isAuthSuccessful) {
           this.saveToCookieStorage(data.token);
-          this.router.navigate(["/"]);
+          this.router.navigate(["/profile"]);
         }
       },
       error: (error: any) => console.log(error)

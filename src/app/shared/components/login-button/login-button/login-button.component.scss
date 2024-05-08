@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@600&display=swap');
+
+.custom-button2 {
+  font-family: Rubik, sans-serif;
+  font-weight: 500;
+  max-width: 250px;
+  height: 80px;
+  overflow: hidden;
+  cursor: pointer;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+}
+.custom-button2:active {
+  transform: scale(var(--scale, 1)) translateZ(0);
+  --scale: .95;
+}
+span.hover{
+  height: 0;
+  display: block;
+  position: relative;
+  top: 22px;
+  font-size: 32px;
+  text-align: center;
+  pointer-events: none;
+}
+#made {
+  color: #676767;
+  font-weight: 400;
+  text-align: center;
+  font-family: 'Montserrat',sans-serif;
+}
+
+button:disabled,
+button[disabled]{
+  border: 2px solid red;
+}
+button:disabled,
+button[disabled].custom-button2:active {
+  transform: none;
+}

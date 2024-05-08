@@ -1,0 +1,35 @@
+<app-header></app-header>
+<div class="user-profile-wrapper" *ngIf="isUserExists">
+  <div class="user-profile-content">
+    <div class="container">
+      <div class="user_info_wrapper">
+        <div class="user-profile__header">
+          <h2>Hello</h2>
+          <h2>{{userInfo.firstName}} {{userInfo.lastName}}</h2>
+        </div>
+        <div class="personal-data m-b-15">
+          <div class="block username m-b-10">
+            <span class="first-line m-b-3">Username</span><span class="second-line">{{userInfo.userName}}</span>
+          </div>
+          <div class="block email m-b-10">
+            <span class="first-line m-b-3">Email</span>
+            <span class="second-line">{{userInfo.email}}</span>
+          </div>
+          <div>
+            <ng-template *ngIf="userInfo.isBanned; else isBanned"><span class="isBanned">Banned</span></ng-template>
+            <ng-template #isBanned><span class="isNotBanned">Not banned</span></ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="buttons">
+        <app-main-button [inputParameters]="subscriptionButton"></app-main-button>
+        <app-main-button [inputParameters]="editButton" (click)="editUserAccount()"></app-main-button>
+        <app-main-button [inputParameters]="changePasswordButton" (click)="editPasswordAccount()"></app-main-button>
+        <app-main-button [inputParameters]="deleteButton" (click)="deleteUserAccount()"></app-main-button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="user-profile-wrapper" *ngIf="!isUserExists">
+  <h2>User does not exist</h2>
+</div>

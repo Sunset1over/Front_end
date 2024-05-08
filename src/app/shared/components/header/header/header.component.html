@@ -16,16 +16,23 @@
       <!--          </div>-->
       <!--        </nav>-->
       <!--      </div>-->
+      <a routerLink="/" class="header-logo">
+        <img src="https://via.placeholder.com/50x50.png" class="logo">
+      </a>
     </div>
     <div class="nav-container">
       <nav class="nav-menu">
-        <a class="nav-menu__button white">текст</a>
-        <a class="nav-menu__button white">текст</a>
-        <a class="nav-menu__button white" *ngIf="isAdmin" routerLink="/admin-panel">админка</a>
+        <a class="nav-menu__button white" *ngIf="isAdmin" routerLink="/admin-panel">AdminPanel</a>
       </nav>
     </div>
     <div class="profile">
-      <button class="m-r-10" routerLink="/profile"></button>
+      <app-icon-button class="m-r-10" [inputParameters]="userProfile"></app-icon-button>
+      <ng-container *ngIf="isAuthenticate; else secondState">
+        <app-icon-button (click)="logout()" [inputParameters]="logoutIcon"></app-icon-button>
+      </ng-container>
+      <ng-template #secondState>
+        <app-icon-button [inputParameters]="loginIcon"></app-icon-button>
+      </ng-template>
     </div>
   </div>
 </div>

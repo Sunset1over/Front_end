@@ -10,8 +10,16 @@ export const routes: Routes = [
     loadChildren: () => import('./authentication/login/login.module').then(m => m.LoginModule)
   },
   {
-    path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
+    path: '',
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule)
+  },
+  {
+    path: '',
+    loadChildren: () => import('./pages/music-recommendation/music-recommendation.module').then(m => m.MusicRecommendationModule)
   },
 ];
 

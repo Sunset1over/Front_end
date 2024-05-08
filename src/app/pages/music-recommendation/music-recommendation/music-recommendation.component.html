@@ -1,0 +1,36 @@
+<app-header></app-header>
+<div>
+  <h3>Поиск</h3>
+
+  <form [formGroup]="musicRecommendation" novalidate (ngSubmit)="submit(musicRecommendation.value)">
+    <app-input
+      type="text"
+      id="Name_song1"
+      formControlName="first_song_name"
+      [inputParameters]="FirstSongInput"
+      (ngModelChange)="onInputChange($event, 0)"
+    >
+    </app-input>
+    <app-input
+      type="text"
+      id="Name_song2"
+      formControlName="second_song_name"
+      [inputParameters]="SecondSongInput"
+      (ngModelChange)="onInputChange($event, 1)"
+    >
+    </app-input>
+
+    <select formControlName="first_song_select" >
+      <option *ngFor="let song of matchingFirstSongs" [value]="song.id">{{ song.name }}</option>
+    </select>
+
+    <!-- Добавление второго селекта -->
+    <select formControlName="second_song_select">
+      <option *ngFor="let song of matchingSecondSongs" [value]="song.id">{{ song.name }}</option>
+    </select>
+
+
+    <app-main-button [inputParameters]="getRecommendation" type="submit"></app-main-button>
+  </form>
+
+</div>

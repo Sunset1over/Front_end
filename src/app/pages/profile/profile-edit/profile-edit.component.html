@@ -1,0 +1,48 @@
+<app-header></app-header>
+<div class="user-profile-wrapper" *ngIf="isUserExists">
+  <form class="login100-form validate-form" [formGroup]="editUserForm" novalidate (ngSubmit)="submit(editUserForm.value)">
+    <app-input
+      type="text"
+      id="username"
+      formControlName="username"
+      [(ngModel)]="userInfo.userName"
+      [inputParameters]="userNameConfig"></app-input>
+    <div class="exception m-b-10 color-red f-s-8">
+      <span *ngIf="validateControl('username')" class="color-red">*Username must contain >8 symbols</span>
+    </div>
+    <app-input
+      type="text"
+      id="email"
+      formControlName="email"
+      [(ngModel)]="userInfo.email"
+      [inputParameters]="emailConfig"></app-input>
+    <div class="exception m-b-10 color-red f-s-8">
+      <span *ngIf="validateControl('email')" class="color-red">*Email is incorrect</span>
+    </div>
+    <app-input
+      type="text"
+      id="firstname"
+      formControlName="firstname"
+      [(ngModel)]="userInfo.firstName"
+      [inputParameters]="firstNameConfig"></app-input>
+    <div class="exception m-b-10 color-red f-s-8">
+      <span *ngIf="validateControl('firstname')" class="color-red">*Firstname must contain >2 symbols</span>
+    </div>
+    <app-input
+      type="text"
+      id="lastname"
+      formControlName="lastname"
+      [(ngModel)]="userInfo.lastName"
+      [inputParameters]="lastNameConfig"></app-input>
+    <div class="exception m-b-10 color-red f-s-8">
+      <span *ngIf="validateControl('lastname')" class="color-red">*Lastname must contain >2 symbols</span>
+    </div>
+    <div class="buttons">
+      <app-main-button type="submit" [inputParameters]="confirmButton" [disabled]="editUserForm.invalid" ></app-main-button>
+      <app-main-button [inputParameters]="cancelButton" (click)="cancel()"></app-main-button>
+    </div>
+  </form>
+</div>
+<div class="user-profile-wrapper" *ngIf="!isUserExists">
+  <h2>User does not exist</h2>
+</div>

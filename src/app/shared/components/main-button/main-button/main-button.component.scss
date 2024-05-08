@@ -1,0 +1,53 @@
+.custom-button{
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  font-family: Rubik, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  overflow: hidden;
+  border-radius: 10px;
+
+}
+.inner{
+  width: 100%;
+}
+.default{
+  max-width: 180px;
+  padding: 18px 32px;
+}
+.small{
+  max-width: 120px;
+  padding: 14px 28px;
+}
+.big{
+  max-width: 220px;
+  padding: 18px 32px;
+}
+.red{
+  background-color: #660216;
+  color: #ffffff;
+}
+.green{
+  background-color: #3d6606;
+  color: #ffffff;
+}
+.yellow{
+  background-color: #f3ac0c;
+  color: #ffffff;
+}
+.dark{
+  background-color: #1e1c1a;
+  color: #ffffff;
+}
+.custom-button:hover{
+  background-color: #232323;
+  color: #ffffff;
+}
+.custom-button.dark:hover{
+  background-color: #f3ac0c;
+  color: #ffffff;
+}
+
+
+
