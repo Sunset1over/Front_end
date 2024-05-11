@@ -1,0 +1,30 @@
+<form action="/" id="my-sample-form" [formGroup]="PaymentForm" novalidate (ngSubmit)="submit(PaymentForm.value)">
+
+  <label>Card Number</label>
+  <app-input
+    type="text"
+    id="cardNumber"
+    formControlName="cardNumber"
+    [inputParameters]="cardNumberConfig"
+  ></app-input>
+
+  <label>CVV</label>
+  <app-input
+    type="text"
+    id="CVV"
+    formControlName="CVV"
+    [inputParameters]="CVVConfig"
+  ></app-input>
+
+  <label>Expiration Date</label>
+  <app-input
+    type="text"
+    id="date"
+    formControlName="date"
+    [inputParameters]="dateConfig"
+  ></app-input>
+
+  <app-main-button [inputParameters]="PaymentButton"></app-main-button>
+
+
+</form>

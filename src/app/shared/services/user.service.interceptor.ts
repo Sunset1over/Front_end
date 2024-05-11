@@ -19,7 +19,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     tap({
       next: (event) => {
         if (event instanceof HttpResponse) {
-          console.log('Server response');
+
         }
       },
       error: (err) => {

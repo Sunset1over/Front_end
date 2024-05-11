@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterModule} from "@angular/router";
-import {AdminComponent} from "./admin/admin.component";
-
+import {StatisticComponent} from "./statistic/statistic.component";
+import {StatisticService} from "./services/statistic.service";
 
 
 @NgModule({
@@ -11,9 +11,9 @@ import {AdminComponent} from "./admin/admin.component";
     CommonModule,
     RouterModule.forChild([
       {
-        path:'admin-panel', component: AdminComponent
+        path:'statistic', component: StatisticComponent
       }
     ])
-  ],
+  ]
 })
-export class AdminModule { }
+export class StatisticModule { }

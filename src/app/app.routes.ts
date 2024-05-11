@@ -21,5 +21,9 @@ export const routes: Routes = [
     path: '',
     loadChildren: () => import('./pages/music-recommendation/music-recommendation.module').then(m => m.MusicRecommendationModule)
   },
+  {
+    path: '',
+    loadChildren: () => import('./pages/statistic/statistic.module').then(m => m.StatisticModule)
+  }
 ];
 

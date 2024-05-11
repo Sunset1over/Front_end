@@ -24,7 +24,6 @@ import {MainButtonComponent} from "../../../shared/components/main-button/main-b
 export class ProfileComponent implements OnInit{
 
   public isUserExists : boolean = false;
-  public isUserIsHospitalHost : boolean = false;
   public userInfo!: UserProfileModel;
   public deleteButton: MainButtonInterface = {
     classes: "red",
@@ -69,8 +68,6 @@ export class ProfileComponent implements OnInit{
       next:(data:UserProfileModel) => {
         this.isUserExists = true;
         this.userInfo = data;
-        this.isUserIsHospitalHost = this.isUserHospitalHost;
-        console.log(this.isUserIsHospitalHost)
       },
       error: error => console.log(error)
     })

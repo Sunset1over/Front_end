@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {UserService} from "../../../shared/services/user.service";
 
 @Component({
   selector: 'app-admin',
@@ -21,10 +22,8 @@ import {FormsModule} from "@angular/forms";
 })
 export class AdminComponent implements OnInit{
   public userList? : UserProfileModel[];
-  public selectedRole?: RoleEnum;
-  public userRole: RoleEnum = RoleEnum.User;
-  public adminRole: RoleEnum = RoleEnum.Admin;
-  constructor(private adminService: AdminService, private route: ActivatedRoute, private router: Router,private cdRef: ChangeDetectorRef) {
+
+  constructor(private adminService: AdminService, private userService: UserService, private route: ActivatedRoute, private router: Router,private cdRef: ChangeDetectorRef) {
   }
   ngOnInit(): void {
     this.refreshUserList();
@@ -40,6 +39,7 @@ export class AdminComponent implements OnInit{
       }
     });
   }
+
   refreshUserList(): void {
     this.adminService.getUserList().subscribe({
       next: (data?: UserProfileModel[]) => {
@@ -55,9 +55,26 @@ export class AdminComponent implements OnInit{
     this.adminService.getUserList(email, username).subscribe({
       next: (data?:UserProfileModel[]) => {
         this.userList = data;
-      },
-      // error: err => {
-      // }
+      }, error: error => console.log(error)
     });
   }
+
+  addAdminRole(userId: string): void {
+    this.adminService.addAdminRole(userId).subscribe({
+      next: () => {
+        this.refreshUserList();
+      },
+      error: error => console.log(error)
+    });
+  }
+
+  removeAdminRole(userId: string): void {
+    this.adminService.removeAdminRole(userId).subscribe({
+      next: () => {
+        this.refreshUserList();
+      },
+      error: error => console.log(error)
+    });
+  }
+
 }
