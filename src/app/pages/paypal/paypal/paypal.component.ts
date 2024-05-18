@@ -11,6 +11,9 @@ import {Router} from "@angular/router";
 import {PayPalService} from "../services/paypal.service";
 import {PaymentRequestModel} from "../models/PaymentRequest.model";
 import {environment} from "../../../environments/environment.prod";
+import {HeaderComponent} from "../../../shared/components/header/header/header.component";
+import {ProductResponse} from "../models/ProductResponse";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-paypal',
@@ -19,13 +22,16 @@ import {environment} from "../../../environments/environment.prod";
     FormsModule,
     ReactiveFormsModule,
     InputComponent,
-    MainButtonComponent
+    MainButtonComponent,
+    HeaderComponent,
+    NgForOf
   ],
   templateUrl: './paypal.component.html',
   styleUrl: './paypal.component.scss'
 })
 export class PaypalComponent implements OnInit{
   PaymentForm!: FormGroup;
+  ProductSubscription!: ProductResponse[];
 
   public cardNumberConfig: IInput = {
     type: 'default',
@@ -64,7 +70,9 @@ export class PaypalComponent implements OnInit{
       "cardNumber": new FormControl("", Validators.required),
       "CVV": new FormControl("", Validators.required),
       "date": new FormControl("", Validators.required),
+      "productName": new FormControl("", Validators.required),
     })
+    this.GetAllProducts()
   }
 
   submit = (PaymentFormValue:any) => {
@@ -75,11 +83,11 @@ export class PaypalComponent implements OnInit{
       CVV: payment.CVV,
       Date: payment.date
     }
-
-    this.initializeBraintree(paymentObject)
+  console.log(payment)
+    this.initializeBraintree(paymentObject, payment.productName)
   }
 
-  initializeBraintree(CreditCardData: CreditCardModel) {
+  initializeBraintree(CreditCardData: CreditCardModel, productId: string) {
     const CLIENT_AUTHORIZATION = environment.CLIENT_AUTHORIZATION
     braintree.client.create({
       authorization: CLIENT_AUTHORIZATION
@@ -110,15 +118,19 @@ export class PaypalComponent implements OnInit{
           return;
         }
 
+        console.log(productId)
+
         const paymentRequest: PaymentRequestModel = {
           paymentMethodNonce: response.creditCards[0].nonce,
-          amount: 10
+          ProductId: productId
         }
+
+        console.log(response.creditCards[0].nonce);
 
         this.paymentService.Create(paymentRequest).subscribe({
           next:(paymentResponse) => {
             if(!paymentResponse.empty){
-              console.log("yra")
+
             }
           }
         })
@@ -126,5 +138,13 @@ export class PaypalComponent implements OnInit{
     });
   }
 
-
+  GetAllProducts(){
+    this.paymentService.GetProduct().subscribe({
+      next:(productResponse: ProductResponse[]) => {
+        console.log(productResponse)
+        this.ProductSubscription = productResponse
+        console.log(this.ProductSubscription)
+      }
+    })
+  }
 }

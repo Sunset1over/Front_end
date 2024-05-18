@@ -24,7 +24,6 @@
       <option *ngFor="let song of matchingFirstSongs" [value]="song.id">{{ song.name }}</option>
     </select>
 
-    <!-- Добавление второго селекта -->
     <select formControlName="second_song_select">
       <option *ngFor="let song of matchingSecondSongs" [value]="song.id">{{ song.name }}</option>
     </select>
@@ -32,5 +31,20 @@
 
     <app-main-button [inputParameters]="getRecommendation" type="submit"></app-main-button>
   </form>
+
+  <table *ngIf="lastRecommendedSongs && lastRecommendedSongs.length > 0" border="1">
+    <thead>
+    <tr>
+      <th>Имя песни</th>
+      <th>Исполнитель</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let song of listRecommendedSongs">
+      <td>{{ song.name }}</td>
+      <td>{{ song.artistName }}</td>
+    </tr>
+    </tbody>
+  </table>
 
 </div>
