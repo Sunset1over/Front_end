@@ -6,7 +6,7 @@ import { UserProfileModel } from "../models/user-profile.model";
 import {Observable} from "rxjs";
 import {UserEditRequest} from "../models/user-edit-request.model";
 import {UserPasswordRequest} from "../models/user-password-request.model";
-import {SubLinkResponse} from "../models/sub-ink.model";
+import {UserPhotoModel} from "../models/user-photo.model";
 
 @Injectable({
   providedIn: 'root'
@@ -41,8 +41,11 @@ export class ProfileService{
     const body = {oldPassword:user.oldPassword, newPassword:user.newPassword};
     return this.http.patch<UserProfileModel>(`${this.api}/api/UserAccount/UpdatePassword`, body);
   }
-  createSubscription(): Observable<SubLinkResponse>{
-    const body = {type: 10}
-    return this.http.post<SubLinkResponse>(`${this.api}/api/Payment/Create`, body);
+
+  changeAvatar(photo?: File):Observable<UserPhotoModel>{
+    const formData = new FormData();
+    formData.append('photo', photo ? photo : "")
+
+    return this.http.put<UserPhotoModel>(`${this.api}/api/UserAccount/ChangeAvatar`, formData);
   }
 }

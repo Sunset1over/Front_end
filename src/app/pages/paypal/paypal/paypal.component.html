@@ -1,3 +1,4 @@
+<app-header></app-header>
 <form action="/" id="my-sample-form" [formGroup]="PaymentForm" novalidate (ngSubmit)="submit(PaymentForm.value)">
 
   <label>Card Number</label>
@@ -24,6 +25,9 @@
     [inputParameters]="dateConfig"
   ></app-input>
 
+  <select formControlName="productName">
+    <option *ngFor="let product of ProductSubscription" [value]="product.id">{{product.productName + " " + product.productCost}}</option>
+  </select>
   <app-main-button [inputParameters]="PaymentButton"></app-main-button>
 
 

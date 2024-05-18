@@ -1,3 +1,5 @@
+import {UserPhotoModel} from "./user-photo.model";
+
 export interface UserProfileModel{
   id: string,
   userName: string;
@@ -6,4 +8,5 @@ export interface UserProfileModel{
   isBanned: boolean;
   firstName : string;
   lastName : string;
+  photo?: UserPhotoModel | null
 }

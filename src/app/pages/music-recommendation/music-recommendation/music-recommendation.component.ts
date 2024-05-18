@@ -32,8 +32,7 @@ import {SongSpotifyResponseModel} from "../models/song-spotify-response.model";
 })
 export class MusicRecommendationComponent implements OnInit{
   musicRecommendation!: FormGroup;
-  public FirstSongId?: string
-  public LastSongId?: string
+  listRecommendedSongs?: SongSpotifyResponseModel[];
   matchingFirstSongs?: SongDbResponseModel[];
   matchingSecondSongs?: SongDbResponseModel[];
   lastRecommendedSongs?: SongSpotifyResponseModel[];
@@ -81,8 +80,6 @@ export class MusicRecommendationComponent implements OnInit{
     })
   }
 
-
-
   submit = (musicRecommendationForm: any) => {
     const data = {...musicRecommendationForm};
 
@@ -93,7 +90,8 @@ export class MusicRecommendationComponent implements OnInit{
 
     this.musicRecommendationService.GetRecommendationById(musicRecommendationRequest.FirstSongId, musicRecommendationRequest.SecondSongId).subscribe({
       next: (data: SongSpotifyResponseModel[]) => {
-        console.log(data)
+        this.listRecommendedSongs = data
+        console.log(this.listRecommendedSongs);
       }, error: (error: any) => console.log(error)
     })
   }

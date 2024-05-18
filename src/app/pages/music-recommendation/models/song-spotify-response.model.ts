@@ -1,7 +1,7 @@
 export interface SongSpotifyResponseModel {
-  Id: string;
-  Name: string;
-  PreviewUrl: string;
-  SongLink: string;
-  ArtistName: string;
+  id: string;
+  name: string;
+  previewUrl: string;
+  songLink: string;
+  artistName: string;
 }

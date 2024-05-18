@@ -21,8 +21,16 @@
           </div>
         </div>
       </div>
+      <div>
+        <form [formGroup]="changeAvatar" novalidate (ngSubmit)="submit($event)">
+          <img [src]="UserPhotoUrl" alt="User Avatar" width="150" height="150">
+          <input type="file" formControlName="avatar" (change)="onFileSelected($event)" accept="image/*"/>
+          <button type="submit">Change Avatar</button>
+        </form>
+      </div>
+
       <div class="buttons">
-        <app-main-button [inputParameters]="subscriptionButton"></app-main-button>
+        <app-main-button [inputParameters]="subscriptionButton" [routerLink]="['/payer-page']"></app-main-button>
         <app-main-button [inputParameters]="editButton" (click)="editUserAccount()"></app-main-button>
         <app-main-button [inputParameters]="changePasswordButton" (click)="editPasswordAccount()"></app-main-button>
         <app-main-button [inputParameters]="deleteButton" (click)="deleteUserAccount()"></app-main-button>
