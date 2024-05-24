@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import * as braintree from 'braintree-web';
-import { InputComponent } from "../../../shared/components/input/input/input.component";
-import { MainButtonComponent } from "../../../shared/components/main-button/main-button/main-button.component";
 import { CreditCardModel } from "../models/CreditCard.model";
 import { Router } from "@angular/router";
 import { PayPalService } from "../services/paypal.service";
@@ -11,6 +9,7 @@ import { environment } from "../../../environments/environment.prod";
 import { HeaderComponent } from "../../../shared/components/header/header/header.component";
 import { ProductResponse } from "../models/ProductResponse";
 import { NgForOf } from "@angular/common";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-paypal',
@@ -18,8 +17,6 @@ import { NgForOf } from "@angular/common";
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    InputComponent,
-    MainButtonComponent,
     HeaderComponent,
     NgForOf
   ],
@@ -30,7 +27,9 @@ export class PaypalComponent implements OnInit {
   PaymentForm!: FormGroup;
   ProductSubscription!: ProductResponse[];
 
-  constructor(private paymentService: PayPalService, private router: Router) {}
+  constructor(private paymentService: PayPalService,
+              private router: Router,
+              private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.PaymentForm = new FormGroup({
@@ -95,7 +94,16 @@ export class PaypalComponent implements OnInit {
         this.paymentService.Create(paymentRequest).subscribe({
           next: (paymentResponse) => {
             if (!paymentResponse.empty) {
+              this.toastr.success("Payment successful.")
               this.router.navigate(["/profile"])
+            }
+            else {
+              this.toastr.error("Check the data is correct")
+            }
+          },
+          error: (err) => {
+            if(err.status == 423){
+              this.toastr.warning("Subscription already exists");
             }
           }
         });

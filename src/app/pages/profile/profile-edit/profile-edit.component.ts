@@ -2,13 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {UserProfileModel} from "../models/user-profile.model";
 import {ProfileService} from "../profile-service/profile-service.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {UserService} from "../../../shared/services/user.service";
+import {Router} from "@angular/router";
 import {UserEditRequest} from "../models/user-edit-request.model";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
 import {NgIf} from "@angular/common";
-import {InputComponent} from "../../../shared/components/input/input/input.component";
-import {MainButtonComponent} from "../../../shared/components/main-button/main-button/main-button.component";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-profile-edit',
@@ -17,8 +15,6 @@ import {MainButtonComponent} from "../../../shared/components/main-button/main-b
     HeaderComponent,
     NgIf,
     ReactiveFormsModule,
-    InputComponent,
-    MainButtonComponent
   ],
   templateUrl: './profile-edit.component.html',
   styleUrl: './profile-edit.component.scss'
@@ -28,7 +24,9 @@ export class ProfileEditComponent implements OnInit {
   public isUserExists : boolean = false;
   public userInfo!: UserProfileModel;
 
-  constructor(private profileService: ProfileService, private route: ActivatedRoute,private router: Router, private  userService: UserService) {}
+  constructor(private profileService: ProfileService,
+              private router: Router,
+              private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.editUserForm = new FormGroup({
@@ -48,13 +46,13 @@ export class ProfileEditComponent implements OnInit {
         this.isUserExists = true;
         this.userInfo = data;
       },
-      error: error => console.log(error)
     })
   }
 
   validateControl = (controlName: string) => {
     return this.editUserForm.get(controlName)?.invalid && this.editUserForm.get(controlName)?.touched
   }
+
   cancel() : void{
     this.router.navigate(["/profile"])
   }
@@ -72,6 +70,7 @@ export class ProfileEditComponent implements OnInit {
 
     this.profileService.editUserProfile(userObject).subscribe({
       next:() => {
+        this.toastr.success("Profile update successfully.")
         this.router.navigate(["/profile"])
       },
       error: error => {
@@ -82,6 +81,5 @@ export class ProfileEditComponent implements OnInit {
         }
       }
     });
-
   }
 }

@@ -1,11 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserProfileModel} from "../../profile/models/user-profile.model";
 import {AdminService} from "../services/admin-service.service";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {RouterLink} from "@angular/router";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {UserService} from "../../../shared/services/user.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-admin',
@@ -23,8 +23,9 @@ import {UserService} from "../../../shared/services/user.service";
 export class AdminComponent implements OnInit{
   public userList? : UserProfileModel[];
 
-  constructor(private adminService: AdminService, private userService: UserService, private route: ActivatedRoute, private router: Router,private cdRef: ChangeDetectorRef) {
-  }
+  constructor(private adminService: AdminService,
+              private toastr: ToastrService) {}
+
   ngOnInit(): void {
     this.refreshUserList();
   }
@@ -32,11 +33,10 @@ export class AdminComponent implements OnInit{
   banUser(userId : string) : void{
     this.adminService.banUser(userId).subscribe({
       next:() => {
+        this.toastr.success("Changed user access");
         this.refreshUserList();
       },
-      error: error => {
-        console.log(error);
-      }
+      error: error => {}
     });
   }
 
@@ -62,6 +62,7 @@ export class AdminComponent implements OnInit{
   addAdminRole(userId: string): void {
     this.adminService.addAdminRole(userId).subscribe({
       next: () => {
+        this.toastr.success("Admin role added");
         this.refreshUserList();
       },
       error: error => console.log(error)
@@ -71,10 +72,10 @@ export class AdminComponent implements OnInit{
   removeAdminRole(userId: string): void {
     this.adminService.removeAdminRole(userId).subscribe({
       next: () => {
+        this.toastr.success("Admin role removed");
         this.refreshUserList();
       },
       error: error => console.log(error)
     });
   }
-
 }

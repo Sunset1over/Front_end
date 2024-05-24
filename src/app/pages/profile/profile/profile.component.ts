@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {ProfileService} from "../profile-service/profile-service.service";
 import {UserProfileModel} from "../models/user-profile.model";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
 import {NgIf} from "@angular/common";
-import {MainButtonComponent} from "../../../shared/components/main-button/main-button/main-button.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {UserPhotoModel} from "../models/user-photo.model";
+import {catchError, of, Subject, takeUntil, tap} from "rxjs";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +15,6 @@ import {UserPhotoModel} from "../models/user-photo.model";
   imports: [
     HeaderComponent,
     NgIf,
-    MainButtonComponent,
     ReactiveFormsModule,
     RouterLink
   ],
@@ -23,14 +23,18 @@ import {UserPhotoModel} from "../models/user-photo.model";
   providers: [ProfileService]
 })
 export class ProfileComponent implements OnInit{
-
   public isUserExists : boolean = false;
   public userInfo!: UserProfileModel;
   public changeAvatar!: FormGroup;
   UserPhotoUrl?: string;
   selectedFile: File | null = null;
+  private unsubscribe$ = new Subject<void>();
 
-  constructor(private profileService: ProfileService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder) {
+  constructor(private profileService: ProfileService,
+              private router: Router,
+              private fb: FormBuilder,
+              private toastr: ToastrService,
+              ) {
     this.changeAvatar = this.fb.group({
       avatar: ['']
     });
@@ -49,17 +53,23 @@ export class ProfileComponent implements OnInit{
 
   submit(event: Event) {
     event.preventDefault();
-    if (this.selectedFile) {
-      this.profileService.changeAvatar(this.selectedFile).subscribe({
-        next: (data: UserPhotoModel) => {
-          this.UserPhotoUrl = data.uri;
-        },
-        error: error => console.log(error)
-      });
-    } else {
-      console.log('No file selected');
+
+    if(this.selectedFile){
+      this.profileService.changeAvatar(this.selectedFile)
+        .pipe(
+          takeUntil(this.unsubscribe$),
+          tap((data: UserPhotoModel) => {
+            this.UserPhotoUrl = data.uri;
+            this.toastr.success("Avatar uploaded successfully.");
+          }),
+          catchError((error) => {
+            this.toastr.warning("No file selected");
+            return of(undefined);
+          })
+        ).subscribe()
     }
   }
+
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;

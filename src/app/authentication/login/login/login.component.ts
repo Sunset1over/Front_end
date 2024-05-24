@@ -8,9 +8,8 @@ import {jwtDecode} from "jwt-decode";
 import {AuthenticationRequestModel} from "../../../models/base-models/authenticationRequestModel.interface";
 import {NgClass, NgIf} from "@angular/common";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
-import {InputComponent} from "../../../shared/components/input/input/input.component";
-import {LoginButtonComponent} from "../../../shared/components/login-button/login-button/login-button.component";
 import {ToastrService} from "ngx-toastr";
+import {catchError, of, Subject, takeUntil, tap} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -20,8 +19,6 @@ import {ToastrService} from "ngx-toastr";
     RouterLink,
     NgIf,
     HeaderComponent,
-    InputComponent,
-    LoginButtonComponent,
     NgClass
   ],
   templateUrl: './login.component.html',
@@ -30,9 +27,13 @@ import {ToastrService} from "ngx-toastr";
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  receivedUser : AuthenticationResponseModel | undefined;
+  private unsubscribe$ = new Subject<void>();
 
-  constructor(private authService: UserService, private CookieService : CookieService, private router: Router) {}
+  constructor(private authService: UserService,
+              private CookieService : CookieService,
+              private router: Router,
+              private toastr: ToastrService) {}
+
   ngOnInit() {
     this.loginForm = new FormGroup({
       "username": new FormControl("", Validators.required),
@@ -41,6 +42,7 @@ export class LoginComponent implements OnInit {
         ])
     })
   }
+
   validateControl = (controlName: string) => {
     return this.loginForm.get(controlName)?.invalid && this.loginForm.get(controlName)?.touched
   }
@@ -80,15 +82,21 @@ export class LoginComponent implements OnInit {
       password: login.password
     }
 
-
-    this.authService.loginUser(userObject).subscribe({
-      next: (data: AuthenticationResponseModel) => {
-        if (data.isAuthSuccessful) {
-          this.saveToCookieStorage(data.token);
-          this.router.navigate(["/music-recommendation"]);
-        }
-      },
-      error: (error: any) => console.log(error)
-    });
+    this.authService.loginUser(userObject)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((data: AuthenticationResponseModel) => {
+          if (data.isAuthSuccessful) {
+         this.saveToCookieStorage(data.token);
+         this.toastr.success("Logged in successfully.");
+         this.router.navigate(["/music-recommendation"]);
+        } else {
+          this.toastr.error(data.errorMessage)
+          }
+        }),
+        catchError((error) => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 }

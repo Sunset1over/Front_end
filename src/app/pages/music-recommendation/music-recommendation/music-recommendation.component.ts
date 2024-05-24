@@ -2,9 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
-import {InputComponent} from "../../../shared/components/input/input/input.component";
-import {LoginButtonComponent} from "../../../shared/components/login-button/login-button/login-button.component";
-import {MainButtonComponent} from "../../../shared/components/main-button/main-button/main-button.component";
 import {MusicRecommendationService} from "../services/music-recommendation-service.service";
 import {SongDbResponseModel} from "../models/song-db-response.model";
 import {SongRecommendationModel} from "../models/song-recommendation.model";
@@ -17,11 +14,8 @@ import {SongSpotifyResponseModel} from "../models/song-spotify-response.model";
     FormsModule,
     NgForOf,
     HeaderComponent,
-    InputComponent,
-    LoginButtonComponent,
     NgIf,
     ReactiveFormsModule,
-    MainButtonComponent
   ],
   templateUrl: './music-recommendation.component.html',
   styleUrl: './music-recommendation.component.scss'
@@ -33,7 +27,8 @@ export class MusicRecommendationComponent implements OnInit{
   matchingSecondSongs?: SongDbResponseModel[];
   lastRecommendedSongs?: SongSpotifyResponseModel[];
 
-  constructor(private musicRecommendationService: MusicRecommendationService, private formBuilder: FormBuilder) {}
+  constructor(private musicRecommendationService: MusicRecommendationService,
+              private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.musicRecommendation = this.formBuilder.group({
@@ -42,7 +37,6 @@ export class MusicRecommendationComponent implements OnInit{
       first_song_select: [''],
       second_song_select: ['']
     });
-
 
     this.musicRecommendationService.GetLastRecommendations().subscribe({
       next: (result: SongSpotifyResponseModel[] ) => {
@@ -70,10 +64,6 @@ export class MusicRecommendationComponent implements OnInit{
     })
   }
 
-  validateControl = (controlName: string) => {
-    return this.musicRecommendation.get(controlName)?.invalid && this.musicRecommendation.get(controlName)?.touched
-  }
-
   onInputChange(e: any, inputId: number) {
     if(e.length >= 3) {
       this.musicRecommendationService.GetSongBySearchString(e).subscribe({
@@ -85,6 +75,5 @@ export class MusicRecommendationComponent implements OnInit{
         }, error: (error: any) => console.log(error)
       })
     }
-
   }
 }

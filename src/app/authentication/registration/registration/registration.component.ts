@@ -6,11 +6,9 @@ import {UserService} from "../../../shared/services/user.service";
 import {IRegistrationRequestModelInterface} from "../../../models/base-models/IRegistrationRequestModel.interface";
 import {catchError, of, Subject, takeUntil, tap} from "rxjs";
 import {IUserResponse} from "../../../models/base-models/IUserResponseModel.interface";
-import {IInput} from "../../../shared/components/input/models/input.interface";
-import {faEnvelope, faEye, faSignature, faUser} from "@fortawesome/free-solid-svg-icons";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
-import {InputComponent} from "../../../shared/components/input/input/input.component";
-import {LoginButtonComponent} from "../../../shared/components/login-button/login-button/login-button.component";
+import {ToastrService} from "ngx-toastr";
+
 
 @Component({
   selector: 'app-registration',
@@ -20,8 +18,6 @@ import {LoginButtonComponent} from "../../../shared/components/login-button/logi
     ReactiveFormsModule,
     NgIf,
     HeaderComponent,
-    InputComponent,
-    LoginButtonComponent,
     RouterLink
   ],
   templateUrl: 'registration.component.html',
@@ -29,14 +25,15 @@ import {LoginButtonComponent} from "../../../shared/components/login-button/logi
   providers: [UserService]
 })
 
-
 export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup;
   private unsubscribe$ = new Subject<void>();
-  receivedUser : IRegistrationRequestModelInterface | undefined;
   error!: string;
 
-  constructor(private authService: UserService, private router: Router) {}
+  constructor(private authService: UserService,
+              private router: Router,
+              private toastr: ToastrService) {}
+
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
       "username": new FormControl("", [Validators.required, Validators.minLength(8)]),
@@ -49,10 +46,6 @@ export class RegistrationComponent implements OnInit {
 
   validateControl = (controlName: string) => {
     return this.registrationForm.get(controlName)?.invalid && this.registrationForm.get(controlName)?.touched
-  }
-
-  hasError = (controlName: string, errorName: string) => {
-    return this.registrationForm.get(controlName)?.hasError(errorName)
   }
 
   submit = (registrationFormValue:any) => {
@@ -70,9 +63,11 @@ export class RegistrationComponent implements OnInit {
       .pipe(
         takeUntil(this.unsubscribe$),
         tap((data: IUserResponse) => {
+          this.toastr.success("Registered successfully.")
           this.router.navigate(['/login'])
         }),
-        catchError((error) => {
+        catchError(() => {
+          this.toastr.error("User with such username or email already exists");
           return of(undefined);
         })
       )

@@ -1,7 +1,6 @@
 import {HttpClient} from "@angular/common/http";
 import {EventEmitter, Injectable} from "@angular/core";
-import {map, Observable} from "rxjs";
-import {jwtDecode} from "jwt-decode";
+import {Observable} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
 import {environment} from "../../environments/environment.prod";
 import {IUserResponse} from "../../models/base-models/IUserResponseModel.interface";
@@ -12,8 +11,10 @@ import {AuthenticationResponseModel} from "../../models/base-models/authenticati
 @Injectable({providedIn: "root"})
 export class UserService {
   private readonly api = environment.urlAddress;
+  public cultureChange: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor(private http: HttpClient, public cookieService: CookieService) {
+  constructor(private http: HttpClient,
+              public cookieService: CookieService) {
   }
 
   loginUser(user:AuthenticationRequestModel):Observable<AuthenticationResponseModel>{
@@ -21,16 +22,12 @@ export class UserService {
     return this.http.post<AuthenticationResponseModel>(`${this.api}/api/Authentication/Login`, body);
   }
 
-  logout(){
-    this.cookieService.deleteAll();
+  public getCultureParam(): string {
+    return this.cookieService.get('culture');
   }
 
-  getDecodedAccessToken(token: string): any {
-    try {
-      return jwtDecode(token);
-    } catch (Error) {
-      return null;
-    }
+  logout(){
+    this.cookieService.deleteAll();
   }
 
   public getToken(): string {
@@ -38,10 +35,8 @@ export class UserService {
   }
 
   public isAuthenticated(): boolean {
-    // get the token
     const token = this.getToken();
-    // return a boolean reflecting
-    // whether the token is expired
+
     return token != '';
   }
 
