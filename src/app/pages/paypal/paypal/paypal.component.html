@@ -1,34 +1,57 @@
 <app-header></app-header>
-<form action="/" id="my-sample-form" [formGroup]="PaymentForm" novalidate (ngSubmit)="submit(PaymentForm.value)">
+<div class="payment-form-wrapper">
+  <div class="payment-form-content">
+    <form action="/" id="my-sample-form" [formGroup]="PaymentForm" novalidate (ngSubmit)="submit(PaymentForm.value)">
 
-  <label>Card Number</label>
-  <app-input
-    type="text"
-    id="cardNumber"
-    formControlName="cardNumber"
-    [inputParameters]="cardNumberConfig"
-  ></app-input>
+      <div class="form-group">
+        <label for="cardNumber">Card Number</label>
+        <input
+          type="text"
+          id="cardNumber"
+          formControlName="cardNumber"
+          class="form-control">
+        <!--        <div class="exception color-red f-s-8">-->
+        <!--          <span>*Invalid card number</span>-->
+        <!--        </div>-->
+      </div>
 
-  <label>CVV</label>
-  <app-input
-    type="text"
-    id="CVV"
-    formControlName="CVV"
-    [inputParameters]="CVVConfig"
-  ></app-input>
+      <div class="form-group">
+        <label for="CVV">CVV</label>
+        <input
+          type="text"
+          id="CVV"
+          formControlName="CVV"
+          class="form-control">
+        <!--        <div class="exception color-red f-s-8">-->
+        <!--          <span>*Invalid CVV</span>-->
+        <!--        </div>-->
+      </div>
 
-  <label>Expiration Date</label>
-  <app-input
-    type="text"
-    id="date"
-    formControlName="date"
-    [inputParameters]="dateConfig"
-  ></app-input>
+      <div class="form-group">
+        <label for="date">Expiration Date</label>
+        <input
+          type="month"
+          id="date"
+          formControlName="date"
+          class="form-control">
+        <!--        <div class="exception color-red f-s-8">-->
+        <!--          <span>*Invalid expiration date</span>-->
+        <!--        </div>-->
+      </div>
 
-  <select formControlName="productName">
-    <option *ngFor="let product of ProductSubscription" [value]="product.id">{{product.productName + " " + product.productCost}}</option>
-  </select>
-  <app-main-button [inputParameters]="PaymentButton"></app-main-button>
+      <div class="form-group">
+        <label>Product</label>
+        <select formControlName="productName" class="form-control">
+          <option *ngFor="let product of ProductSubscription" [value]="product.id">
+            {{ product.productName + " " + product.productCost }}
+          </option>
+        </select>
+      </div>
 
-
-</form>
+      <div class="buttons">
+        <button type="submit" [disabled]="PaymentForm.invalid" class="btn btn-primary">Pay</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>

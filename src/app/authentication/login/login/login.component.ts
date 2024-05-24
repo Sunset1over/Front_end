@@ -6,12 +6,11 @@ import {AuthenticationResponseModel} from "../../../models/base-models/authentic
 import {Router, RouterLink} from "@angular/router";
 import {jwtDecode} from "jwt-decode";
 import {AuthenticationRequestModel} from "../../../models/base-models/authenticationRequestModel.interface";
-import {NgIf} from "@angular/common";
+import {NgClass, NgIf} from "@angular/common";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
-import {IInput} from "../../../shared/components/input/models/input.interface";
-import {faEye, faUser} from "@fortawesome/free-solid-svg-icons";
 import {InputComponent} from "../../../shared/components/input/input/input.component";
 import {LoginButtonComponent} from "../../../shared/components/login-button/login-button/login-button.component";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-login',
@@ -22,7 +21,8 @@ import {LoginButtonComponent} from "../../../shared/components/login-button/logi
     NgIf,
     HeaderComponent,
     InputComponent,
-    LoginButtonComponent
+    LoginButtonComponent,
+    NgClass
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss', '../../../../styles.scss', '../../../../util.scss'],
@@ -31,22 +31,6 @@ import {LoginButtonComponent} from "../../../shared/components/login-button/logi
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   receivedUser : AuthenticationResponseModel | undefined;
-
-  public loginConfig: IInput = {
-    type: 'default',
-    placeholder: 'Username',
-    isDisabled: false,
-    error:"Error",
-    icon: faUser
-  }
-  public passwordConfig: IInput = {
-    type: 'default',
-    placeholder: 'Password',
-    isDisabled: false,
-    error: "Error",
-    icon: faEye,
-    isChangingType: true
-  }
 
   constructor(private authService: UserService, private CookieService : CookieService, private router: Router) {}
   ngOnInit() {
@@ -89,7 +73,6 @@ export class LoginComponent implements OnInit {
 
   submit = (loginFormValue:any) => {
 
-
     const login = {...loginFormValue};
 
     const userObject: AuthenticationRequestModel = {
@@ -102,7 +85,7 @@ export class LoginComponent implements OnInit {
       next: (data: AuthenticationResponseModel) => {
         if (data.isAuthSuccessful) {
           this.saveToCookieStorage(data.token);
-          this.router.navigate(["/profile"]);
+          this.router.navigate(["/music-recommendation"]);
         }
       },
       error: (error: any) => console.log(error)

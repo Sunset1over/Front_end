@@ -35,52 +35,15 @@ export class RegistrationComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
   receivedUser : IRegistrationRequestModelInterface | undefined;
   error!: string;
-  public loginConfig: IInput = {
-    type: 'default',
-    placeholder: 'Username',
-    isDisabled: false,
-    error:"Error",
-    icon: faUser
-  }
-  public firstnameConfig: IInput = {
-    type: 'default',
-    placeholder: 'Firstname',
-    isDisabled: false,
-    error:"Error",
-    icon: faSignature
-  }
-  public lastnameConfig: IInput = {
-    type: 'default',
-    placeholder: 'Lastname',
-    isDisabled: false,
-    error:"Error",
-    icon: faSignature
-  }
-  public passwordConfig: IInput = {
-    type: 'default',
-    placeholder: 'Password',
-    isDisabled: false,
-    error:"Error",
-    icon: faEye,
-    isChangingType : true
-  }
-  public emailConfig: IInput = {
-    type: 'default',
-    placeholder: 'Email',
-    isDisabled: false,
-    error:"Error",
-    icon: faEnvelope,
-    isChangingType : false
-  }
 
   constructor(private authService: UserService, private router: Router) {}
   ngOnInit(): void {
     this.registrationForm = new FormGroup({
       "username": new FormControl("", [Validators.required, Validators.minLength(8)]),
-      "password": new FormControl("", [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,32}$')]),
+      "password": new FormControl("", [Validators.required, Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,32}$')]),
       "firstname": new FormControl("", [Validators.required]),
       "lastname":new FormControl("", Validators.required),
-      "email": new FormControl("", [Validators.required, Validators.email])
+      "email": new FormControl("", [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')]),
     })
   }
 

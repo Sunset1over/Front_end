@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {RouterLink} from "@angular/router";
+import {BrowserModule} from "@angular/platform-browser";
 
 
 
@@ -8,7 +9,8 @@ import {RouterLink} from "@angular/router";
   declarations: [],
   imports: [
     CommonModule,
-    RouterLink
+    RouterLink,
+    BrowserModule
   ]
 })
 export class HeaderModule { }

@@ -27,7 +27,6 @@ export class AdminService {
       queryParams.push(`SearchRequest=${username}`);
     }
     const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
-    console.log(queryString)
     return this.http.get<UserProfileModel[]>(`${this.api}/api/Admin/GetUserList${queryString}`);
   }
 

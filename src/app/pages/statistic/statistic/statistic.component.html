@@ -1,3 +1,23 @@
-<div class="chart-container">
-  <canvas  id="MyChart" >{{ chart }}</canvas>
+<app-header></app-header>
+<div class="statistics-wrapper">
+  <div class="statistics-header">
+    <h1>Statistics</h1>
+    <div class="date-picker">
+      <label for="dateFrom">From:</label>
+      <input type="date" id="dateFrom" [(ngModel)]="currentRequest.DateFrom" [max]="today">
+      <label for="dateTo">To:</label>
+      <input type="date" id="dateTo" [(ngModel)]="currentRequest.DateTo" [max]="today">
+      <button (click)="onDateChange()">Update</button>
+    </div>
+    <div class="select-box">
+      <select id="statisticsType" (change)="onStatisticsTypeChange($event)">
+        <option value="login">Login Statistics</option>
+        <option value="userInfo">User Info Statistics</option>
+        <option value="recommendation">Recommendation Statistics</option>
+      </select>
+    </div>
+  </div>
+  <div class="chart-container">
+    <canvas id="MyChart">{{ chart }}</canvas>
+  </div>
 </div>

@@ -1,43 +1,49 @@
 <app-header></app-header>
+
 <div class="user-profile-wrapper" *ngIf="isUserExists">
   <div class="user-profile-content">
-    <div class="container">
-      <div class="user_info_wrapper">
-        <div class="user-profile__header">
-          <h2>Hello</h2>
-          <h2>{{userInfo.firstName}} {{userInfo.lastName}}</h2>
-        </div>
-        <div class="personal-data m-b-15">
-          <div class="block username m-b-10">
-            <span class="first-line m-b-3">Username</span><span class="second-line">{{userInfo.userName}}</span>
-          </div>
-          <div class="block email m-b-10">
-            <span class="first-line m-b-3">Email</span>
-            <span class="second-line">{{userInfo.email}}</span>
-          </div>
-          <div>
-            <ng-template *ngIf="userInfo.isBanned; else isBanned"><span class="isBanned">Banned</span></ng-template>
-            <ng-template #isBanned><span class="isNotBanned">Not banned</span></ng-template>
-          </div>
-        </div>
-      </div>
-      <div>
+    <div class="user-profile-left">
+      <div class="avatar-section">
+        <img [src]="UserPhotoUrl" alt="User Avatar" class="user-avatar">
         <form [formGroup]="changeAvatar" novalidate (ngSubmit)="submit($event)">
-          <img [src]="UserPhotoUrl" alt="User Avatar" width="150" height="150">
-          <input type="file" formControlName="avatar" (change)="onFileSelected($event)" accept="image/*"/>
-          <button type="submit">Change Avatar</button>
+          <input type="file" formControlName="avatar" (change)="onFileSelected($event)" accept="image/*" class="file-input"/>
+          <button type="submit" class="btn btn-avatar">Change Avatar</button>
         </form>
       </div>
+    </div>
 
+    <div class="user-profile-center">
+      <div class="personal-data">
+        <div class="block">
+          <span class="first-line">First Name:</span>
+          <span class="second-line">{{userInfo.firstName}}</span>
+        </div>
+        <div class="block">
+          <span class="first-line">Last Name:</span>
+          <span class="second-line">{{userInfo.lastName}}</span>
+        </div>
+        <div class="block">
+          <span class="first-line">Username:</span>
+          <span class="second-line">{{userInfo.userName}}</span>
+        </div>
+        <div class="block">
+          <span class="first-line">Email:</span>
+          <span class="second-line">{{userInfo.email}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="user-profile-right">
       <div class="buttons">
-        <app-main-button [inputParameters]="subscriptionButton" [routerLink]="['/payer-page']"></app-main-button>
-        <app-main-button [inputParameters]="editButton" (click)="editUserAccount()"></app-main-button>
-        <app-main-button [inputParameters]="changePasswordButton" (click)="editPasswordAccount()"></app-main-button>
-        <app-main-button [inputParameters]="deleteButton" (click)="deleteUserAccount()"></app-main-button>
+        <button class="btn btn-primary" [routerLink]="['/payer-page']">Subscription</button>
+        <button class="btn btn-primary" (click)="editUserAccount()">Edit Account</button>
+        <button class="btn btn-primary" (click)="editPasswordAccount()">Change Password</button>
+        <button class="btn btn-danger" (click)="deleteUserAccount()">Delete Account</button>
       </div>
     </div>
   </div>
 </div>
+
 <div class="user-profile-wrapper" *ngIf="!isUserExists">
   <h2>User does not exist</h2>
 </div>

@@ -1,71 +1,140 @@
-.user-profile-wrapper{
+// Variables
+$border-color-dark: #4d404e;
+$background-color-light: #bebebb;
+$border-radius-large: 10px;
+$border-radius-small: 5px;
+$font-size-large: 18px;
+$font-size-medium: 14px;
+$padding-small: 5px;
+$padding-medium: 15px;
+$gap-large: 20px;
+$max-width-container: 1200px;
+$max-width-block: 300px;
+$border-dark-red: 2px solid darkred;
+$border-dark-green: 2px solid darkgreen;
+$btn-primary-bg: #007bff;
+$btn-danger-bg: #dc3545;
+$btn-hover-bg: darken($btn-primary-bg, 10%);
+$btn-danger-hover-bg: darken($btn-danger-bg, 10%);
+
+// User Profile Styles
+.user-profile-wrapper {
   display: flex;
   justify-content: center;
   width: 100%;
-}
-.user-profile-content{
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 15px;
-}
-.user-profile__header{
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-}
-.header{
-  font-size: 18px;
-}
-/*.user-profile__photo{*/
-/*  border: 2px solid #4d404e;*/
-/*  border-radius: 50%;*/
-/*}*/
-.isBanned{
-  font-size: 14px;
-  padding: 5px;
-  border-radius: 10px;
-  border: 2px solid darkred;
-}
-.isNotBanned{
-  font-size: 14px;
-  padding: 5px;
-  border-radius: 10px;
-  border: 2px solid darkgreen;
-}
-.buttons{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: end;
-}
-.block{
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 300px;
-}
-.first-line{
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.second-line{
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 10px;
-  background-color: #bebebb;
-  border-radius: 5px;
-}
-.container{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
 }
 
+.user-profile-content {
+  max-width: $max-width-container;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: $padding-medium;
+  background-color: #fff;
+  border-radius: $border-radius-large;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 25%;
+}
+
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .user-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid $border-color-dark;
+    margin-bottom: $padding-small;
+  }
+
+  .file-input {
+    margin-bottom: $padding-small;
+  }
+
+  .btn-avatar {
+    padding: $padding-small $padding-medium;
+    border: none;
+    border-radius: $border-radius-small;
+    cursor: pointer;
+    background-color: $btn-primary-bg;
+    color: white;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $btn-hover-bg;
+    }
+  }
+}
+
+.user-profile-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  padding: 0 $padding-medium;
+
+  .personal-data {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-small;
+
+    .block {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: $padding-small;
+      padding: $padding-small;
+      background-color: $background-color-light;
+      border-radius: $border-radius-small;
+
+      .first-line {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.user-profile-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  width: 25%;
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: $padding-small;
+    align-items: flex-end;
+
+    .btn {
+      width: 100%;
+      padding: $padding-small $padding-medium;
+      border: none;
+      border-radius: $border-radius-small;
+      cursor: pointer;
+      background-color: $btn-primary-bg;
+      color: white;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $btn-hover-bg;
+      }
+    }
+
+    .btn-danger {
+      background-color: $btn-danger-bg;
+
+      &:hover {
+        background-color: $btn-danger-hover-bg;
+      }
+    }
+  }
+}

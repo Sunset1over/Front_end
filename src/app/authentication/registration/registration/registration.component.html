@@ -1,65 +1,78 @@
-<app-header></app-header>
 <div class="limiter">
   <div class="container-login100">
     <div class="wrap-login100">
       <form class="login100-form validate-form" [formGroup]="registrationForm" novalidate (ngSubmit)="submit(registrationForm.value)">
-        <div class="welcome-wrap p-b-30">
-          <span class="login100-form-title p-b-20">
-             Welcome
-          </span>
-          <div class="welcome-wrap__img">
-            <img src="https://via.placeholder.com/50x50.png" class="welcome-wrap__img-size">
+        <div class="welcome-wrap">
+          <div class="welcome-content">
+            <div class="welcome-wrap__img">
+              <img src="https://melodyfusion.blob.core.windows.net/photo/logo.svg" class="welcome-wrap__img-size">
+            </div>
+            <span class="login100-form-title">
+              MelodyFusion
+            </span>
           </div>
         </div>
-        <app-input type="text"
-                   id="firstname"
-                   formControlName="firstname"
-                   [inputParameters]="firstnameConfig"
-        ></app-input>
-        <div class="exception m-b-5 color-red f-s-8">
-          <span *ngIf="validateControl('firstname')" class="color-red">*Firstname is required</span>
+        <div class="sign-in-text">Sign up</div>
+
+        <div class="input-wrap">
+          <span class="input-icon">
+            <i class="fas fa-user"></i>
+          </span>
+          <input type="text" id="firstname" formControlName="firstname" [placeholder]="'Firstname...'" class="form-control">
+          <div class="exception m-b-5 color-red f-s-8">
+            <span *ngIf="validateControl('firstname')" class="color-red">*Firstname is required</span>
+          </div>
         </div>
-        <app-input type= "text"
-                   id="lastname"
-                   formControlName="lastname"
-                   [inputParameters]="lastnameConfig"
-        ></app-input>
-        <div class="exception m-b-5 color-red f-s-8">
-          <span *ngIf="validateControl('lastname')" class="color-red">*Lastname is required</span>
+
+        <div class="input-wrap">
+          <span class="input-icon">
+            <i class="fas fa-user"></i>
+          </span>
+          <input type="text" id="lastname" formControlName="lastname" [placeholder]="'Lastname...'" class="form-control">
+          <div class="exception m-b-5 color-red f-s-8">
+            <span *ngIf="validateControl('lastname')" class="color-red">*Lastname is required</span>
+          </div>
         </div>
-        <app-input
-          type="text"
-          id="username"
-          formControlName="username"
-          [inputParameters]="loginConfig"
-        ></app-input>
-        <div class="exception m-b-5 color-red f-s-8">
-          <span *ngIf="validateControl('username')" class="color-red">*Username must contain 8 characters long</span>
+
+        <div class="input-wrap">
+          <span class="input-icon">
+            <i class="fas fa-user"></i>
+          </span>
+          <input type="text" id="username" formControlName="username" [placeholder]="'Username...'" class="form-control">
+          <div class="exception m-b-5 color-red f-s-8">
+            <span *ngIf="validateControl('username')" class="color-red">*Username must contain 8 characters long</span>
+          </div>
         </div>
-        <app-input type="password"
-                   id="password"
-                   formControlName="password"
-                   [inputParameters]="passwordConfig"
-        ></app-input>
-        <div class="exception m-b-10 color-red f-s-8">
-          <span *ngIf="validateControl('password')" class="color-red">*Password must contain:<br>1)a-z and A-Z<br>2)0-9</span>
+
+        <div class="input-wrap">
+          <span class="input-icon">
+            <i class="fas fa-lock"></i>
+          </span>
+          <input type="password" id="password" formControlName="password" [placeholder]="'Password...'" class="form-control">
+          <div class="exception m-b-10 color-red f-s-8">
+            <span *ngIf="validateControl('password')" class="color-red">*Password must contain:<br>1)a-z and A-Z<br>2)0-9<br>3)unique symbol<br></span>
+          </div>
         </div>
-        <app-input type="email"
-                   id="email"
-                   formControlName="email"
-                   [inputParameters]="emailConfig"
-        ></app-input>
-        <div class="exception m-b-10 color-red f-s-8">
-          <span *ngIf="validateControl('email')" class="color-red">*Email is incorrect</span>
+
+        <div class="input-wrap">
+          <span class="input-icon">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <input type="email" id="email" formControlName="email" [placeholder]="'Email...'" class="form-control">
+          <div class="exception m-b-10 color-red f-s-8">
+            <span *ngIf="validateControl('email')" class="color-red">*Email is incorrect</span>
+          </div>
         </div>
+
         <div class="form-group m-b-15">
-          <app-login-button type="submit" text="Registration" [disabled]="registrationForm.invalid"></app-login-button>
+          <button type="submit" class="login-button" [disabled]="registrationForm.invalid">Crate an account</button>
         </div>
+
       </form>
       <div class="nav-link">
-        <a [routerLink]="['/login']">haveAccount</a>
+        <span class="first-time-text">Have an account?</span>
+        <a [routerLink]="['/login']">Sign in</a>
       </div>
     </div>
   </div>
 </div>
-

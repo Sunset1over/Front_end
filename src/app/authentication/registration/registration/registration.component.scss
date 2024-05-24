@@ -1,6 +1,20 @@
-/*//////////////////////////////////////////////////////////////////
-[ login ]*/
+// Variables
+$background-color: #f2f2f2;
+$white-color: #fff;
+$gray-color: #666666;
+$dark-gray-color: #333333;
+$red-color: red;
+$font-family-bold: 'Poppins-Bold', serif;
+$font-family-regular: 'Poppins-Regular', serif;
+$box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+$font-size-large: 30px;
+$font-size-medium: 18px;
+$font-size-small: 14px;
+$font-weight-bold: bold;
+$border-radius: 8px;
+$input-border: 1px solid #fff;
 
+// SCSS styles
 .limiter {
   width: 100%;
   margin: 0 auto;
@@ -9,48 +23,66 @@
 .container-login100 {
   width: 100%;
   min-height: 100vh;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   padding: 15px;
-  background: #f2f2f2;
+  background: $background-color;
 }
 
 .wrap-login100 {
   width: 390px;
-  background: #fff;
+  background: $white-color;
   border-radius: 10px;
   overflow: hidden;
   padding: 77px 55px 33px 55px;
+  background: #5e78bf;
 
-  box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-  -webkit-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-  -o-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-  -ms-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
-}
-
-.welcome-wrap{
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
-}
-.welcome-wrap__img{
-  display: flex;
-  justify-content: center;
-  align-content: center;
-}
-.welcome-wrap__img-size{
-  /*max-height: 50px;*/
-  /*max-width: 50px;*/
+  box-shadow: $box-shadow;
+  -moz-box-shadow: $box-shadow;
+  -webkit-box-shadow: $box-shadow;
+  -o-box-shadow: $box-shadow;
+  -ms-box-shadow: $box-shadow;
 }
 
+.welcome-wrap {
+  margin-bottom: 20px;
+
+  .welcome-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__img-size {
+    max-height: 50px;
+    max-width: 50px;
+  }
+}
+
+.login100-form-title {
+  font-family: $font-family-bold;
+  font-size: $font-size-large;
+  color: $dark-gray-color;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.sign-in-text {
+  text-align: center;
+  font-family: $font-family-regular;
+  font-size: $font-size-medium;
+  color: $dark-gray-color;
+  margin-bottom: 20px;
+  font-weight: $font-weight-bold;
+}
 
 /*------------------------------------------------------------------
 [ Form ]*/
@@ -59,56 +91,105 @@
   width: 100%;
 }
 
-.login100-form-title {
-  display: block;
-  font-family: Poppins-Bold;
-  font-size: 30px;
-  color: #333333;
-  line-height: 1.2;
-  text-align: center;
-}
-.login100-form-title i {
-  font-size: 60px;
+.input-wrap {
+  position: relative;
+  margin-bottom: 20px;
+  width: 320px;
+  right: 15px;
+
+  .input-icon {
+    position: relative;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #adadad; /* цвет иконки */
+  }
+
+  input.form-control {
+    width: calc(100% - 40px);
+    padding-left: 40px;
+    border: 1px solid #adadad;
+    border-radius: $border-radius;
+    height: 40px;
+    font-size: $font-size-medium;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #6a7dfe;
+    }
+  }
 }
 
-/*//////////////////////////////////////////////////////////////////
-[ Utility ]*/
+.login-button {
+  background-color: #4CAF50;
+  color: $white-color;
+  border: none;
+  width: 320px;
+  border-radius: $border-radius;
+  padding: 10px 20px;
+  font-size: $font-size-medium;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #45a049;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
 .txt1 {
-  font-family: Poppins-Regular;
+  font-family: $font-family-regular;
   font-size: 13px;
-  color: #666666;
+  color: $gray-color;
   line-height: 1.5;
 }
 
 .txt2 {
-  font-family: Poppins-Regular;
+  font-family: $font-family-regular;
   font-size: 13px;
-  color: #333333;
+  color: $dark-gray-color;
   line-height: 1.5;
 }
 
-.color-red{
-  color: red;
+.color-red {
+  position: relative;
+  left: 9px;
+  color: $red-color;
 }
 
-.f-s-8{
-  font-size: 14px;
+.f-s-8 {
+  font-size: $font-size-small;;
 }
 
-.exception{
+.exception {
   margin-bottom: 5px;
-  transition: margin-bottom 0.5s ;
+  transition: margin-bottom 0.5s;
 }
-.form-group{
-  display: flex;
-  justify-content: center;
-}
-.nav-link{
+
+.nav-link {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
+}
+
+.first-time-text {
+  font-size: $font-size-small;
+  margin-right: 10px;
+}
+
+.registration-link {
+  color: #6a7dfe;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 
-
-
+.form-group {
+  display: flex;
+  justify-content: center;
+}

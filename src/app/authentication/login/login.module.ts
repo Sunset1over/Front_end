@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import {RouterModule} from "@angular/router";
 import {LoginComponent} from "./login/login.component";
 import {ReactiveFormsModule} from "@angular/forms";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ToastrModule} from "ngx-toastr";
 
 
 

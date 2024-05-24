@@ -2,11 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ProfileService} from "../profile-service/profile-service.service";
 import {UserProfileModel} from "../models/user-profile.model";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {UserService} from "../../../shared/services/user.service";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
 import {NgIf} from "@angular/common";
-import {MainButtonInterface} from "../../../shared/components/main-button/models/main-button.interface";
-import {faKey, faMoneyBill, faPencil, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {MainButtonComponent} from "../../../shared/components/main-button/main-button/main-button.component";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {UserPhotoModel} from "../models/user-photo.model";
@@ -32,33 +29,6 @@ export class ProfileComponent implements OnInit{
   public changeAvatar!: FormGroup;
   UserPhotoUrl?: string;
   selectedFile: File | null = null;
-  public deleteButton: MainButtonInterface = {
-    classes: "red",
-    icon: faTrash,
-    size: "default",
-    text: "Delete"
-  }
-  public editButton: MainButtonInterface = {
-    classes: "yellow",
-    icon: faPencil,
-    link: `/profile/edit`,
-    size: "default",
-    text: "Edit"
-  }
-  public subscriptionButton: MainButtonInterface = {
-    classes: "green",
-    icon: faMoneyBill,
-    link: "/payer-page",
-    size: "default",
-    text: "Create subscription"
-  }
-  public changePasswordButton: MainButtonInterface = {
-    classes: "yellow",
-    icon: faKey,
-    link: `/profile/changePassword`,
-    size: "default",
-    text: "Change password"
-  }
 
   constructor(private profileService: ProfileService, private route: ActivatedRoute, private router: Router, private fb: FormBuilder) {
     this.changeAvatar = this.fb.group({
@@ -112,10 +82,10 @@ export class ProfileComponent implements OnInit{
   }
 
   editUserAccount(): void {
-    console.log("deleted")
+    this.router.navigate(["/profile/edit"]);
   }
 
   editPasswordAccount(): void {
-    console.log("deleted")
+    this.router.navigate(["/profile/changePassword"]);
   }
 }

@@ -22,7 +22,6 @@ export class ProfileService{
   deleteUserProfile() : void{
     this.http.delete(`${this.api}/api/UserAccount/DeleteAccount`).subscribe(
       () => {
-        // Success handler
         this.cookieService.deleteAll();
       },
       (error) => {

@@ -1,9 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {UserProfileModel} from "../models/user-profile.model";
-import {MainButtonInterface} from "../../../shared/components/main-button/models/main-button.interface";
-import {faCheck, faEnvelope, faSignature, faUser, faXmark} from "@fortawesome/free-solid-svg-icons";
-import {IInput} from "../../../shared/components/input/models/input.interface";
 import {ProfileService} from "../profile-service/profile-service.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../../shared/services/user.service";
@@ -30,48 +27,7 @@ export class ProfileEditComponent implements OnInit {
   editUserForm!: FormGroup;
   public isUserExists : boolean = false;
   public userInfo!: UserProfileModel;
-  public confirmButton: MainButtonInterface = {
-    classes: "green",
-    icon: faCheck,
-    size: "default",
-    text: "Confirm"
-  }
-  public cancelButton: MainButtonInterface = {
-    classes: "yellow",
-    icon: faXmark,
-    link: `/profile/edit`,
-    size: "default",
-    text: "Cancel"
-  }
-  public userNameConfig: IInput = {
-    type: 'default',
-    placeholder: 'Username',
-    isDisabled: false,
-    error:"Error",
-    icon: faUser
-  }
 
-  public firstNameConfig: IInput = {
-    type: 'default',
-    placeholder: 'Firstname',
-    isDisabled: false,
-    error:"Error",
-    icon: faSignature
-  }
-  public lastNameConfig: IInput = {
-    type: 'default',
-    placeholder: 'Lastname',
-    isDisabled: false,
-    error:"Error",
-    icon: faSignature
-  }
-  public emailConfig: IInput = {
-    type: 'default',
-    placeholder: 'Email',
-    isDisabled: false,
-    error:"Error",
-    icon: faEnvelope
-  }
   constructor(private profileService: ProfileService, private route: ActivatedRoute,private router: Router, private  userService: UserService) {}
 
   ngOnInit(): void {
@@ -104,7 +60,6 @@ export class ProfileEditComponent implements OnInit {
   }
 
   submit = (editUserFormValue:any) => {
-
 
     const info = {...editUserFormValue};
 

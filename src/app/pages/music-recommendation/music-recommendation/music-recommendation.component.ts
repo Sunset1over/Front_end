@@ -1,14 +1,10 @@
-import {ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
-import {ActivatedRoute, Router} from "@angular/router";
 import {InputComponent} from "../../../shared/components/input/input/input.component";
 import {LoginButtonComponent} from "../../../shared/components/login-button/login-button/login-button.component";
-import {IInput} from "../../../shared/components/input/models/input.interface";
-import {faKey, faUser} from "@fortawesome/free-solid-svg-icons";
 import {MainButtonComponent} from "../../../shared/components/main-button/main-button/main-button.component";
-import {MainButtonInterface} from "../../../shared/components/main-button/models/main-button.interface";
 import {MusicRecommendationService} from "../services/music-recommendation-service.service";
 import {SongDbResponseModel} from "../models/song-db-response.model";
 import {SongRecommendationModel} from "../models/song-recommendation.model";
@@ -37,28 +33,7 @@ export class MusicRecommendationComponent implements OnInit{
   matchingSecondSongs?: SongDbResponseModel[];
   lastRecommendedSongs?: SongSpotifyResponseModel[];
 
-  public FirstSongInput: IInput = {
-    type: 'default',
-    placeholder: 'Username',
-    isDisabled: false,
-    error: "Error",
-    icon: faUser
-  }
-  public SecondSongInput: IInput = {
-    type: 'default',
-    placeholder: 'Username',
-    isDisabled: false,
-    error: "Error",
-    icon: faUser
-  }
-  public getRecommendation: MainButtonInterface = {
-    classes: "yellow",
-    icon: faKey,
-    size: "default",
-    text: "Get Recommendation"
-  }
-
-  constructor(private musicRecommendationService: MusicRecommendationService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder) {}
+  constructor(private musicRecommendationService: MusicRecommendationService, private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
     this.musicRecommendation = this.formBuilder.group({
@@ -68,10 +43,10 @@ export class MusicRecommendationComponent implements OnInit{
       second_song_select: ['']
     });
 
+
     this.musicRecommendationService.GetLastRecommendations().subscribe({
       next: (result: SongSpotifyResponseModel[] ) => {
         this.lastRecommendedSongs = result
-        console.log(result)
       }, error: (err)=> {
         if (err.status != 423) {
           console.log(err);
@@ -91,9 +66,12 @@ export class MusicRecommendationComponent implements OnInit{
     this.musicRecommendationService.GetRecommendationById(musicRecommendationRequest.FirstSongId, musicRecommendationRequest.SecondSongId).subscribe({
       next: (data: SongSpotifyResponseModel[]) => {
         this.listRecommendedSongs = data
-        console.log(this.listRecommendedSongs);
       }, error: (error: any) => console.log(error)
     })
+  }
+
+  validateControl = (controlName: string) => {
+    return this.musicRecommendation.get(controlName)?.invalid && this.musicRecommendation.get(controlName)?.touched
   }
 
   onInputChange(e: any, inputId: number) {

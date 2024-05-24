@@ -1,0 +1,177 @@
+// Variables
+$primary-color: #5e78bf;
+$secondary-color: #20283e;
+$border-color: #ccc;
+$text-color-light: #f2f2f2;
+$button-bg-color: #00796b;
+$button-bg-hover: #004d40;
+$border-radius: 10px;
+$container-max-width: 1200px;
+$image-block-width: 282px;
+$image-block-height: 480px;
+$form-input-width: 282px;
+$button-padding: 15px;
+$button-font-size: 16px;
+
+// Global Styles
+.header-background {
+  background: $primary-color;
+  width: 100%;
+}
+
+.container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 20px;
+  background: $primary-color;
+}
+
+.image-blocks,
+.input-blocks,
+.selected-blocks {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+
+  .image-block {
+    width: $image-block-width;
+    height: $image-block-height;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $secondary-color;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+
+    img {
+      width: 60px;
+      height: 60px;
+    }
+  }
+}
+
+// Styles for the find-music-block
+.find-music-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $image-block-width;
+  height: $image-block-height;
+  position: relative;
+
+  .circle {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .find-music-logo {
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes rotateText {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+
+  input[type="text"],
+  select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid $border-color;
+    border-radius: 5px;
+    width: $form-input-width;
+  }
+
+  button.main-button {
+    padding: $button-padding;
+    font-size: $button-font-size;
+    color: $text-color-light;
+    background-color: $button-bg-color;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $button-bg-hover;
+    }
+  }
+}
+
+.button-block {
+  max-width: 1010px;
+  padding-left: 150px;
+}
+
+.recommendations-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  h2 {
+    margin: 20px 0;
+    color: $text-color-light;
+  }
+}
+
+.music-recommendation-block {
+  width: 220px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  background: $secondary-color;
+  min-height: 300px;
+
+  img {
+    width: 220px;
+    height: 347px;
+    border-radius: $border-radius;
+  }
+
+  span {
+    color: $text-color-light;
+    padding-left: 10px;
+  }
+}
+
+.music-recommendation-blocks {
+  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.color-red {
+  position: relative;
+  left: 9px;
+  color: red;
+}
+
+.f-s-8 {
+  font-size: 14px;
+}
+
+.exception {
+  margin-bottom: 5px;
+  transition: margin-bottom 0.5s;
+}

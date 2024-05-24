@@ -15,6 +15,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     });
   }
 
+  // const cultureParam = this.auth.getCultureParam();
+  // if (cultureParam) {
+  //   modifiedReq = modifiedReq.clone({
+  //     params: modifiedReq.params.set('culture', cultureParam)
+  //   });
+  // }
+
   return next(modifiedReq).pipe(
     tap({
       next: (event) => {

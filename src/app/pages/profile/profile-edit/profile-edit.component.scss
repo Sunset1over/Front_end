@@ -1,67 +1,109 @@
-.user-profile-wrapper{
-  display: flex;
-  justify-content: center;
+/* Variables */
+$background-color: #f2f2f2;
+$white-color: #fff;
+$gray-color: #666666;
+$dark-gray-color: #333333;
+$red-color: red;
+$green-color: green;
+$dark-green-color: darkgreen;
+$dark-red-color: darkred;
+$font-family-bold: 'Poppins-Bold', serif;
+$font-family-regular: 'Poppins-Regular', serif;
+$box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.1);
+$font-size-large: 30px;
+$font-size-medium: 18px;
+$font-size-small: 14px;
+$font-weight-bold: bold;
+$border-radius: 8px;
+$input-border: 1px solid #ced4da;
+$input-focus-border-color: #80bdff;
+$input-focus-box-shadow: rgba(0, 123, 255, 0.25);
+$primary-color: #5e78bf;
+$button-primary-bg: #4CAF50;
+$button-primary-bg-disabled: #a8dadc;
+$button-secondary-bg: red;
+
+/*//////////////////////////////////////////////////////////////////
+[ Profile Edit ]*/
+
+.profile-limiter {
   width: 100%;
+  margin: 0 auto;
 }
-.user-profile-content{
-  max-width: 1200px;
+
+.profile-container {
   width: 100%;
+  min-height: 100vh;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  flex-direction: column;
-  padding: 15px;
-}
-.user-profile__header{
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
   align-items: center;
-  gap: 20px;
+  padding: 15px;
+  background: $background-color;
+}
+
+.profile-wrap {
+  width: 390px;
+  background: $primary-color;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 77px 55px 33px 55px;
+  box-shadow: $box-shadow;
+}
+
+.login100-form {
   width: 100%;
 }
-.header{
-  font-size: 18px;
+
+.form-group {
+  margin-bottom: 15px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: $font-weight-bold;
+    color: $white-color;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: $input-border;
+    border-radius: $border-radius;
+    &:focus {
+      border-color: $input-focus-border-color;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem $input-focus-box-shadow;
+    }
+  }
+
+  .exception {
+    margin-top: 5px;
+  }
 }
-/*.user-profile__photo{*/
-/*  border: 2px solid #4d404e;*/
-/*  border-radius: 50%;*/
-/*}*/
-.isBanned{
-  font-size: 14px;
-  padding: 5px;
-  border-radius: 10px;
-  border: 2px solid darkred;
-}
-.isNotBanned{
-  font-size: 14px;
-  padding: 5px;
-  border-radius: 10px;
-  border: 2px solid darkgreen;
-}
-.buttons{
+
+.buttons {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-}
-.block{
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 300px;
-}
-.first-line{
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.second-line{
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 10px;
-  background-color: #bebebb;
-  border-radius: 5px;
-}
-.color-red{
-  color: red;
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background-color: $button-primary-bg;
+    color: $white-color;
+    &:disabled {
+      background-color: $button-primary-bg-disabled;
+    }
+  }
+
+  .btn-secondary {
+    background-color: $button-secondary-bg;
+    color: $white-color;
+  }
 }

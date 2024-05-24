@@ -1,38 +1,22 @@
-<div class="header-container">
-  <div class="header-wrap">
-    <div class="header-logo ">
-      <!--      <div class="burger">-->
-      <!--        <nav class="burger">-->
-      <!--          <div class="burger-button">-->
-      <!--            <span class="burger-top"></span>-->
-      <!--            <span class="burger-middle"></span>-->
-      <!--            <span class="burger-bottom"></span>-->
-      <!--          </div>-->
-      <!--          <div class="burger-menu">-->
-      <!--            <a class="nav-menu__button white">Lost animals</a>-->
-      <!--            <a class="nav-menu__button white">+Advertise</a>-->
-      <!--            <a class="nav-menu__button white">Questions</a>-->
-      <!--            <a class="nav-menu__button white" *ngIf="isAdmin">Handle users</a>-->
-      <!--          </div>-->
-      <!--        </nav>-->
-      <!--      </div>-->
-      <a routerLink="/" class="header-logo">
-        <img src="https://via.placeholder.com/50x50.png" class="logo">
-      </a>
-    </div>
-    <div class="nav-container">
-      <nav class="nav-menu">
-        <a class="nav-menu__button white" *ngIf="isAdmin" routerLink="/admin-panel">AdminPanel</a>
-      </nav>
-    </div>
-    <div class="profile">
-      <app-icon-button class="m-r-10" [inputParameters]="userProfile"></app-icon-button>
-      <ng-container *ngIf="isAuthenticate; else secondState">
-        <app-icon-button (click)="logout()" [inputParameters]="logoutIcon"></app-icon-button>
-      </ng-container>
-      <ng-template #secondState>
-        <app-icon-button [inputParameters]="loginIcon"></app-icon-button>
-      </ng-template>
+<div class="header-background">
+  <div class="header-container">
+    <div class="header-wrap">
+      <div class="header-logo">
+        <a class="header-logo">
+          <img src="https://melodyfusion.blob.core.windows.net/photo/logo.svg" class="logo">
+        </a>
+        <span class="program-name">MelodyFusion</span>
+      </div>
+      <div class="language-container">
+        <a class="language white" (click)="setCulture('ua')">ua</a>
+        <a class="language white" (click)="setCulture('en')">en</a>
+      </div>
+      <div class="profile">
+        <a routerLink="/music-recommendation" routerLinkActive="active-link">Home</a>
+        <a routerLink="/profile" routerLinkActive="active-link">Profile</a>
+        <a *ngIf="isAdmin" routerLink="/admin-panel" routerLinkActive="active-link">AdminPanel</a>
+        <a (click)="logout()" routerLink="/login">Logout <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon></a>
+      </div>
     </div>
   </div>
 </div>

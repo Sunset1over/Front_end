@@ -1,19 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import * as braintree from 'braintree-web';
-import {InputComponent} from "../../../shared/components/input/input/input.component";
-import {MainButtonComponent} from "../../../shared/components/main-button/main-button/main-button.component";
-import {IInput} from "../../../shared/components/input/models/input.interface";
-import {faEye, faKey, faUser} from "@fortawesome/free-solid-svg-icons";
-import {MainButtonInterface} from "../../../shared/components/main-button/models/main-button.interface";
-import {CreditCardModel} from "../models/CreditCard.model";
-import {Router} from "@angular/router";
-import {PayPalService} from "../services/paypal.service";
-import {PaymentRequestModel} from "../models/PaymentRequest.model";
-import {environment} from "../../../environments/environment.prod";
-import {HeaderComponent} from "../../../shared/components/header/header/header.component";
-import {ProductResponse} from "../models/ProductResponse";
-import {NgForOf} from "@angular/common";
+import { InputComponent } from "../../../shared/components/input/input/input.component";
+import { MainButtonComponent } from "../../../shared/components/main-button/main-button/main-button.component";
+import { CreditCardModel } from "../models/CreditCard.model";
+import { Router } from "@angular/router";
+import { PayPalService } from "../services/paypal.service";
+import { PaymentRequestModel } from "../models/PaymentRequest.model";
+import { environment } from "../../../environments/environment.prod";
+import { HeaderComponent } from "../../../shared/components/header/header/header.component";
+import { ProductResponse } from "../models/ProductResponse";
+import { NgForOf } from "@angular/common";
 
 @Component({
   selector: 'app-paypal',
@@ -27,68 +24,40 @@ import {NgForOf} from "@angular/common";
     NgForOf
   ],
   templateUrl: './paypal.component.html',
-  styleUrl: './paypal.component.scss'
+  styleUrls: ['./paypal.component.scss']
 })
-export class PaypalComponent implements OnInit{
+export class PaypalComponent implements OnInit {
   PaymentForm!: FormGroup;
   ProductSubscription!: ProductResponse[];
-
-  public cardNumberConfig: IInput = {
-    type: 'default',
-    placeholder: 'card number',
-    isDisabled: false,
-    error:"Error",
-    icon: faUser
-  }
-  public CVVConfig: IInput = {
-    type: 'default',
-    placeholder: 'CVV',
-    isDisabled: false,
-    error: "Error",
-    icon: faEye,
-    isChangingType: true
-  }
-  public dateConfig: IInput = {
-    type: 'default',
-    placeholder: 'date',
-    isDisabled: false,
-    error: "Error",
-    icon: faEye,
-    isChangingType: true
-  }
-  public PaymentButton: MainButtonInterface = {
-    classes: "yellow",
-    icon: faKey,
-    size: "default",
-    text: "Pay"
-  }
 
   constructor(private paymentService: PayPalService, private router: Router) {}
 
   ngOnInit(): void {
     this.PaymentForm = new FormGroup({
-      "cardNumber": new FormControl("", Validators.required),
-      "CVV": new FormControl("", Validators.required),
+      "cardNumber": new FormControl("", [Validators.required, Validators.pattern(/^\d{16}$/)]),
+      "CVV": new FormControl("", [Validators.required, Validators.pattern(/^\d{3,4}$/)]),
       "date": new FormControl("", Validators.required),
       "productName": new FormControl("", Validators.required),
-    })
-    this.GetAllProducts()
+    });
+    this.GetAllProducts();
   }
 
-  submit = (PaymentFormValue:any) => {
-    const payment = {...PaymentFormValue}
+  submit = (PaymentFormValue: any) => {
+    const payment = { ...PaymentFormValue };
+
+    const formattedDate = this.formatExpirationDate(payment.date);
 
     const paymentObject: CreditCardModel = {
       cardNumber: payment.cardNumber,
       CVV: payment.CVV,
-      Date: payment.date
-    }
-  console.log(payment)
-    this.initializeBraintree(paymentObject, payment.productName)
+      Date: formattedDate
+    };
+
+    this.initializeBraintree(paymentObject, payment.productName);
   }
 
   initializeBraintree(CreditCardData: CreditCardModel, productId: string) {
-    const CLIENT_AUTHORIZATION = environment.CLIENT_AUTHORIZATION
+    const CLIENT_AUTHORIZATION = environment.CLIENT_AUTHORIZATION;
     braintree.client.create({
       authorization: CLIENT_AUTHORIZATION
     }, (clientErr, clientInstance) => {
@@ -118,33 +87,42 @@ export class PaypalComponent implements OnInit{
           return;
         }
 
-        console.log(productId)
-
         const paymentRequest: PaymentRequestModel = {
           paymentMethodNonce: response.creditCards[0].nonce,
           ProductId: productId
-        }
-
-        console.log(response.creditCards[0].nonce);
+        };
 
         this.paymentService.Create(paymentRequest).subscribe({
-          next:(paymentResponse) => {
-            if(!paymentResponse.empty){
-
+          next: (paymentResponse) => {
+            if (!paymentResponse.empty) {
+              this.router.navigate(["/profile"])
             }
           }
-        })
+        });
       });
     });
   }
 
-  GetAllProducts(){
+  GetAllProducts() {
     this.paymentService.GetProduct().subscribe({
-      next:(productResponse: ProductResponse[]) => {
-        console.log(productResponse)
-        this.ProductSubscription = productResponse
-        console.log(this.ProductSubscription)
+      next: (productResponse: ProductResponse[]) => {
+        this.ProductSubscription = productResponse;
       }
-    })
+    });
+  }
+
+  cancel(): void {
+    this.router.navigate(["/profile"]);
+  }
+
+  formatExpirationDate(date: string): string {
+    if (!date) return '';
+
+    const [year, month] = date.split('-');
+    return `${month}/${year.slice(2)}`;
   }
 }
+
+//number: "4111111111111111"
+//expirationDate: "10/20"
+//cvv: "123"

@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../../services/user.service";
 import {UserInformationCollectorService} from "../../../services/userInformationCollector.service";
-import {CookieService} from "ngx-cookie-service";
-import {RouterLink} from "@angular/router";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 import {NgIf} from "@angular/common";
-import {IIconButton} from "../../icon-button/models/icon-button.interface";
-import {faAddressCard, faArrowRightToBracket, faUser} from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import {IconButtonComponent} from "../../icon-button/icon-button/icon-button.component";
+import {FaIconComponent, FaIconLibrary} from "@fortawesome/angular-fontawesome";
+import {CookieService} from "ngx-cookie-service";
 
 @Component({
   selector: 'app-header',
@@ -14,7 +14,9 @@ import {IconButtonComponent} from "../../icon-button/icon-button/icon-button.com
   imports: [
     RouterLink,
     NgIf,
-    IconButtonComponent
+    IconButtonComponent,
+    RouterLinkActive,
+    FaIconComponent
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -22,32 +24,12 @@ import {IconButtonComponent} from "../../icon-button/icon-button/icon-button.com
 })
 export class HeaderComponent implements OnInit {
 
-  public loginIcon: IIconButton = {
-    classes: "default",
-    icon: faUser,
-    isOutside: false,
-    link: '/login'
+  constructor(private userInformation: UserInformationCollectorService, private userService: UserService, private library: FaIconLibrary, private  cookieService: CookieService) {
+    this.library.addIcons(faSignOutAlt);
   }
-  public logoutIcon: IIconButton = {
-    classes: "default",
-    icon: faArrowRightToBracket,
-    isOutside: false,
-    link: '/login'
-  }
-  public userProfile: IIconButton = {
-    classes: "default",
-    icon: faAddressCard,
-    isOutside: false,
-    link: `/profile`
-  }
-
-  constructor(private userInformation: UserInformationCollectorService, private userService: UserService, private cookieService: CookieService) {}
 
   ngOnInit(): void {}
 
-  public get isAuthenticate() {
-    return !!this.userInformation.token;
-  }
   public get isAdmin() {
     if (this.userInformation.userInfo) {
       for (let role of this.userInformation.userInfo.role) {
@@ -57,8 +39,11 @@ export class HeaderComponent implements OnInit {
     return false;
   }
 
+  setCulture(culture: string) {
+    this.cookieService.set('culture', culture);
+  }
+
   public logout() {
     this.userService.logout();
   }
-
 }

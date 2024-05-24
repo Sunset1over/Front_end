@@ -1,48 +1,61 @@
 <app-header></app-header>
-<div class="user-profile-wrapper" *ngIf="isUserExists">
-  <form class="login100-form validate-form" [formGroup]="editUserForm" novalidate (ngSubmit)="submit(editUserForm.value)">
-    <app-input
-      type="text"
-      id="username"
-      formControlName="username"
-      [(ngModel)]="userInfo.userName"
-      [inputParameters]="userNameConfig"></app-input>
-    <div class="exception m-b-10 color-red f-s-8">
-      <span *ngIf="validateControl('username')" class="color-red">*Username must contain >8 symbols</span>
+<div class="profile-limiter" *ngIf="isUserExists">
+  <div class="profile-container">
+    <div class="profile-wrap">
+      <form class="login100-form validate-form" [formGroup]="editUserForm" novalidate (ngSubmit)="submit(editUserForm.value)">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            [(ngModel)]="userInfo.userName"
+            class="form-control">
+          <div class="exception color-red f-s-8" *ngIf="validateControl('username')">
+            <span>*Username must contain >8 symbols</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="text"
+            id="email"
+            formControlName="email"
+            [(ngModel)]="userInfo.email"
+            class="form-control">
+          <div class="exception color-red f-s-8" *ngIf="validateControl('email')">
+            <span>*Email is incorrect</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="firstname">First Name</label>
+          <input
+            type="text"
+            id="firstname"
+            formControlName="firstname"
+            [(ngModel)]="userInfo.firstName"
+            class="form-control">
+          <div class="exception color-red f-s-8" *ngIf="validateControl('firstname')">
+            <span>*Firstname must contain >2 symbols</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="lastname">Last Name</label>
+          <input
+            type="text"
+            id="lastname"
+            formControlName="lastname"
+            [(ngModel)]="userInfo.lastName"
+            class="form-control">
+          <div class="exception color-red f-s-8" *ngIf="validateControl('lastname')">
+            <span>*Lastname must contain >2 symbols</span>
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="submit" [disabled]="editUserForm.invalid" class="btn btn-primary">Confirm</button>
+          <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        </div>
+      </form>
     </div>
-    <app-input
-      type="text"
-      id="email"
-      formControlName="email"
-      [(ngModel)]="userInfo.email"
-      [inputParameters]="emailConfig"></app-input>
-    <div class="exception m-b-10 color-red f-s-8">
-      <span *ngIf="validateControl('email')" class="color-red">*Email is incorrect</span>
-    </div>
-    <app-input
-      type="text"
-      id="firstname"
-      formControlName="firstname"
-      [(ngModel)]="userInfo.firstName"
-      [inputParameters]="firstNameConfig"></app-input>
-    <div class="exception m-b-10 color-red f-s-8">
-      <span *ngIf="validateControl('firstname')" class="color-red">*Firstname must contain >2 symbols</span>
-    </div>
-    <app-input
-      type="text"
-      id="lastname"
-      formControlName="lastname"
-      [(ngModel)]="userInfo.lastName"
-      [inputParameters]="lastNameConfig"></app-input>
-    <div class="exception m-b-10 color-red f-s-8">
-      <span *ngIf="validateControl('lastname')" class="color-red">*Lastname must contain >2 symbols</span>
-    </div>
-    <div class="buttons">
-      <app-main-button type="submit" [inputParameters]="confirmButton" [disabled]="editUserForm.invalid" ></app-main-button>
-      <app-main-button [inputParameters]="cancelButton" (click)="cancel()"></app-main-button>
-    </div>
-  </form>
-</div>
-<div class="user-profile-wrapper" *ngIf="!isUserExists">
-  <h2>User does not exist</h2>
+  </div>
 </div>

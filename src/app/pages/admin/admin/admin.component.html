@@ -6,34 +6,25 @@
         <input type="text" class="form-control" placeholder="Username" id="username">
         <input type="text" class="form-control" placeholder="Email" id="email">
         <div class="input-group-append">
-          <button class="btn btn-primary" type="button" (click)="filterUser()">Searh User</button>
+          <button class="btn btn-primary" type="button" (click)="filterUser()">Search User</button>
+          <button class="btn btn-info" type="button" [routerLink]="['/statistic']">Statistics</button>
         </div>
       </div>
       <div class="content">
-        <div *ngFor="let item of userList">
-          <div class="item-wrapper m-b-20">
-            <div class="name">{{item.firstName}} {{item.lastName}}</div>
-            <div class="info">
-              <div class="info-items">
-                <div class="mail">
-                  Email: {{item.email}}
-                </div>
-                <div class="username">
-                  UserName: {{item.userName}}
-                </div>
-                <div class="ban">
-                  HasBan: {{item.isBanned}}
-                </div>
-                <div class="admin">
-                  IsAdmin: {{item.isAdmin}}
-                </div>
-              </div>
-              <div class="input-group-append">
-                <button *ngIf="item.isAdmin" class="btn btn-primary" type="button" (click)="removeAdminRole(item.id)">Delete role admin</button>
-                <button *ngIf="!item.isAdmin" class="btn btn-primary" type="button" (click)="addAdminRole(item.id)">Add role admin</button>
-                <button *ngIf="item.isBanned" class="btn btn-primary" type="button" (click)="banUser(item.id)">unBanUser</button>
-                <button *ngIf="!item.isBanned" class="btn btn-primary" type="button" (click)="banUser(item.id)">BanUser</button>
-              </div>
+        <div *ngFor="let item of userList" class="item-wrapper">
+          <div class="name">{{item.firstName}} {{item.lastName}}</div>
+          <div class="info">
+            <div class="info-items">
+              <div class="mail">Email: {{item.email}}</div>
+              <div class="username">Username: {{item.userName}}</div>
+              <div class="ban">HasBan: {{item.isBanned}}</div>
+              <div class="admin">IsAdmin: {{item.isAdmin}}</div>
+            </div>
+            <div class="input-group-append">
+              <button *ngIf="item.isAdmin" class="btn btn-secondary" type="button" (click)="removeAdminRole(item.id)">Delete admin role</button>
+              <button *ngIf="!item.isAdmin" class="btn btn-success" type="button" (click)="addAdminRole(item.id)">Add admin role</button>
+              <button *ngIf="item.isBanned" class="btn btn-warning" type="button" (click)="banUser(item.id)">Unban User</button>
+              <button *ngIf="!item.isBanned" class="btn btn-danger" type="button" (click)="banUser(item.id)">Ban User</button>
             </div>
           </div>
         </div>
@@ -41,33 +32,3 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-<!--<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--  <div class="modal-dialog" role="document">-->
-<!--    <div class="modal-content">-->
-<!--      <div class="modal-header">-->
-<!--        <h5 class="modal-title" id="exampleModalLabel">Changing role</h5>-->
-<!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--          <span aria-hidden="true">&times;</span>-->
-<!--        </button>-->
-<!--      </div>-->
-<!--      <div class="modal-body">-->
-<!--        <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="selectedRole">-->
-<!--          <option *ngIf="userRole" [value]="userRole">User</option>-->
-<!--          <option *ngIf="doctor" [value]="doctor">Doctor</option>-->
-<!--          <option *ngIf="hospitalHost" [value]="hospitalHost">Hospital</option>-->
-<!--          <option *ngIf="adminRole" [value]="adminRole">Admin</option>-->
-<!--        </select>-->
-<!--      </div>-->
-<!--      <div class="modal-footer">-->
-<!--        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-<!--&lt;!&ndash;        <button type="button" class="btn btn-primary" (click)="changeUserRole(item.id, selectedRole)">Save</button>&ndash;&gt;-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->

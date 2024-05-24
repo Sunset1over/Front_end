@@ -1,8 +1,7 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {UserProfileModel} from "../../profile/models/user-profile.model";
-import {RoleEnum} from "../models/role-enum.model";
 import {AdminService} from "../services/admin-service.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
@@ -15,7 +14,8 @@ import {UserService} from "../../../shared/services/user.service";
     HeaderComponent,
     NgForOf,
     FormsModule,
-    NgIf
+    NgIf,
+    RouterLink
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'

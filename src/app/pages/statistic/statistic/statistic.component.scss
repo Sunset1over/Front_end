@@ -1,0 +1,103 @@
+// Variables
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$background-color: #f8f9fa;
+$text-color: #212529;
+$border-radius: 5px;
+
+// Global Styles
+body {
+  font-family: Arial, sans-serif;
+  background-color: $background-color;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+}
+
+.statistics-wrapper {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: $border-radius;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.statistics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 24px;
+    color: $primary-color;
+  }
+
+  .date-picker {
+    display: flex;
+    align-items: center;
+
+    label {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      margin-right: 10px;
+      border: 1px solid #ced4da;
+      border-radius: $border-radius;
+      background-color: $background-color;
+      color: $text-color;
+      font-size: 16px;
+      cursor: pointer;
+
+      &:hover {
+        border-color: $primary-color;
+      }
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: $border-radius;
+      background-color: $primary-color;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+  }
+
+  .select-box {
+    select {
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: $border-radius;
+      background-color: $background-color;
+      color: $text-color;
+      font-size: 16px;
+      cursor: pointer;
+
+      &:hover {
+        border-color: $primary-color;
+      }
+    }
+  }
+}
+
+.chart-container {
+  canvas {
+    width: 100%;
+    max-width: 1000px;
+    height: 500px;
+    border: 1px solid #ced4da;
+    border-radius: $border-radius;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+}
