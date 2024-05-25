@@ -6,6 +6,7 @@ import {HeaderComponent} from "../../../shared/components/header/header/header.c
 import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
+import {catchError, of, Subject, takeUntil, tap} from "rxjs";
 
 @Component({
   selector: 'app-admin',
@@ -22,6 +23,7 @@ import {ToastrService} from "ngx-toastr";
 })
 export class AdminComponent implements OnInit{
   public userList? : UserProfileModel[];
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private adminService: AdminService,
               private toastr: ToastrService) {}
@@ -31,51 +33,73 @@ export class AdminComponent implements OnInit{
   }
 
   banUser(userId : string) : void{
-    this.adminService.banUser(userId).subscribe({
-      next:() => {
-        this.toastr.success("Changed user access");
-        this.refreshUserList();
-      },
-      error: error => {}
-    });
+    this.adminService.banUser(userId)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap(() => {
+          this.toastr.success("Changed user access");
+          this.refreshUserList();
+        }),
+        catchError(() => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 
   refreshUserList(): void {
-    this.adminService.getUserList().subscribe({
-      next: (data?: UserProfileModel[]) => {
-        this.userList = data;
-      },
-      error: error => console.log(error)
-    })
+    this.adminService.getUserList()
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((data?: UserProfileModel[]) => {
+          this.userList = data;
+        }),
+        catchError(() => {
+          return of(undefined);
+        })
+      ).subscribe();
   }
 
   filterUser() : void{
     const email = (document.querySelector('#email') as HTMLInputElement).value;
     const username = (document.querySelector('#username') as HTMLInputElement).value;
-    this.adminService.getUserList(email, username).subscribe({
-      next: (data?:UserProfileModel[]) => {
-        this.userList = data;
-      }, error: error => console.log(error)
-    });
+
+    this.adminService.getUserList(email, username)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((data: UserProfileModel[]) => {
+          this.userList = data;
+        }),
+        catchError(() => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 
   addAdminRole(userId: string): void {
-    this.adminService.addAdminRole(userId).subscribe({
-      next: () => {
-        this.toastr.success("Admin role added");
-        this.refreshUserList();
-      },
-      error: error => console.log(error)
-    });
+    this.adminService.addAdminRole(userId)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap(() => {
+          this.toastr.success("Admin role added");
+          this.refreshUserList();
+        }),
+        catchError(() => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 
   removeAdminRole(userId: string): void {
-    this.adminService.removeAdminRole(userId).subscribe({
-      next: () => {
-        this.toastr.success("Admin role removed");
-        this.refreshUserList();
-      },
-      error: error => console.log(error)
-    });
+    this.adminService.removeAdminRole(userId)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap(() => {
+          this.toastr.success("Admin role removed");
+          this.refreshUserList();
+        }),
+        catchError(() => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 }

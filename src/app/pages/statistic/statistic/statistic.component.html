@@ -4,9 +4,9 @@
     <h1>Statistics</h1>
     <div class="date-picker">
       <label for="dateFrom">From:</label>
-      <input type="date" id="dateFrom" [(ngModel)]="currentRequest.DateFrom" [max]="today">
+      <input type="date" id="dateFrom" [(ngModel)]="currentRequest.DateFrom">
       <label for="dateTo">To:</label>
-      <input type="date" id="dateTo" [(ngModel)]="currentRequest.DateTo" [max]="today">
+      <input type="date" id="dateTo" [(ngModel)]="currentRequest.DateTo">
       <button (click)="onDateChange()">Update</button>
     </div>
     <div class="select-box">

@@ -5,7 +5,6 @@ import {NgIf} from "@angular/common";
 import {UserService} from "../../../shared/services/user.service";
 import {IRegistrationRequestModelInterface} from "../../../models/base-models/IRegistrationRequestModel.interface";
 import {catchError, of, Subject, takeUntil, tap} from "rxjs";
-import {IUserResponse} from "../../../models/base-models/IUserResponseModel.interface";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
 import {ToastrService} from "ngx-toastr";
 
@@ -62,9 +61,12 @@ export class RegistrationComponent implements OnInit {
     this.authService.registerUser(registrationRequest)
       .pipe(
         takeUntil(this.unsubscribe$),
-        tap((data: IUserResponse) => {
+        tap(() => {
           this.toastr.success("Registered successfully.")
-          this.router.navigate(['/login'])
+          this.router.navigate(['/login']).then(
+            () => {},
+            () => {}
+          )
         }),
         catchError(() => {
           this.toastr.error("User with such username or email already exists");

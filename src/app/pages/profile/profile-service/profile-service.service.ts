@@ -3,32 +3,36 @@ import {environment} from "../../../environments/environment.prod";
 import {HttpClient} from "@angular/common/http";
 import {CookieService} from "ngx-cookie-service";
 import { UserProfileModel } from "../models/user-profile.model";
-import {Observable} from "rxjs";
+import {Observable, Subject, takeUntil, tap} from "rxjs";
 import {UserEditRequest} from "../models/user-edit-request.model";
 import {UserPasswordRequest} from "../models/user-password-request.model";
 import {UserPhotoModel} from "../models/user-photo.model";
+import {ToastrService} from "ngx-toastr";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService{
   private readonly api = environment.urlAddress;
-  constructor(private http: HttpClient , private cookieService: CookieService) { }
+  private unsubscribe$ = new Subject<void>();
+
+  constructor(private http: HttpClient,
+              private cookieService: CookieService,
+              private toastr: ToastrService) { }
 
   getUserProfile():Observable<UserProfileModel>{
     return this.http.get<UserProfileModel>(`${this.api}/api/UserAccount/GetUserInfo`);
   }
 
   deleteUserProfile() : void{
-    this.http.delete(`${this.api}/api/UserAccount/DeleteAccount`).subscribe(
-      () => {
-        this.cookieService.deleteAll();
-      },
-      (error) => {
-        // Error handler
-        console.error(error);
-      }
-    );
+    this.http.delete(`${this.api}/api/UserAccount/DeleteAccount`)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap(() => {
+          this.cookieService.deleteAll()
+          this.toastr.success("User Profile Deleted Successfully!");
+        })
+      ).subscribe();
   }
 
   editUserProfile(user: UserEditRequest):Observable<UserProfileModel>{

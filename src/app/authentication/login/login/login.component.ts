@@ -87,14 +87,15 @@ export class LoginComponent implements OnInit {
         takeUntil(this.unsubscribe$),
         tap((data: AuthenticationResponseModel) => {
           if (data.isAuthSuccessful) {
-         this.saveToCookieStorage(data.token);
-         this.toastr.success("Logged in successfully.");
-         this.router.navigate(["/music-recommendation"]);
-        } else {
-          this.toastr.error(data.errorMessage)
-          }
+            this.saveToCookieStorage(data.token);
+            this.toastr.success("Logged in successfully.");
+            this.router.navigate(["/music-recommendation"]).then(
+              () => {},
+              () => {}
+            );
+          } else this.toastr.error(data.errorMessage)
         }),
-        catchError((error) => {
+        catchError(() => {
           return of(undefined)
         })
       ).subscribe();

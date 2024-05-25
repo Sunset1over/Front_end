@@ -41,14 +41,18 @@ export class ProfileComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.profileService.getUserProfile().subscribe({
-      next:(data:UserProfileModel) => {
-        this.isUserExists = true;
-        this.userInfo = data;
-        this.initializeUserPhoto();
-      },
-      error: error => console.log(error)
-    })
+    this.profileService.getUserProfile()
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((data: UserProfileModel) => {
+          this.isUserExists = true;
+          this.userInfo = data;
+          this.initializeUserPhoto();
+        }),
+        catchError(() => {
+          return of(undefined);
+        })
+      ).subscribe();
   }
 
   submit(event: Event) {
@@ -73,29 +77,33 @@ export class ProfileComponent implements OnInit{
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-    }
+    if (input.files && input.files.length > 0) this.selectedFile = input.files[0];
   }
 
   initializeUserPhoto(): void {
-    if (this.userInfo.photo && this.userInfo.photo.uri) {
-      this.UserPhotoUrl = this.userInfo.photo.uri;
-    } else {
-      this.UserPhotoUrl = 'https://melodyfusion.blob.core.windows.net/photo/pngtree-businessman.png';
-    }
+    if (this.userInfo.photo && this.userInfo.photo.uri) this.UserPhotoUrl = this.userInfo.photo.uri;
+    else this.UserPhotoUrl = 'https://melodyfusion.blob.core.windows.net/photo/pngtree-businessman.png';
   }
 
   deleteUserAccount() : void{
     this.profileService.deleteUserProfile();
-    this.router.navigate(["/login"]);
+    this.router.navigate(["/login"]).then(
+      () => {},
+      () => {}
+    );
   }
 
   editUserAccount(): void {
-    this.router.navigate(["/profile/edit"]);
+    this.router.navigate(["/profile/edit"]).then(
+      () => {},
+      () => {}
+    );
   }
 
   editPasswordAccount(): void {
-    this.router.navigate(["/profile/changePassword"]);
+    this.router.navigate(["/profile/changePassword"]).then(
+      () => {},
+      () => {}
+    );
   }
 }

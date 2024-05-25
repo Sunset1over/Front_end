@@ -6,6 +6,8 @@ import {MusicRecommendationService} from "../services/music-recommendation-servi
 import {SongDbResponseModel} from "../models/song-db-response.model";
 import {SongRecommendationModel} from "../models/song-recommendation.model";
 import {SongSpotifyResponseModel} from "../models/song-spotify-response.model";
+import {catchError, of, Subject, takeUntil, tap} from "rxjs";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-music-recommendation',
@@ -26,9 +28,11 @@ export class MusicRecommendationComponent implements OnInit{
   matchingFirstSongs?: SongDbResponseModel[];
   matchingSecondSongs?: SongDbResponseModel[];
   lastRecommendedSongs?: SongSpotifyResponseModel[];
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private musicRecommendationService: MusicRecommendationService,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder,
+              private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.musicRecommendation = this.formBuilder.group({
@@ -38,15 +42,17 @@ export class MusicRecommendationComponent implements OnInit{
       second_song_select: ['']
     });
 
-    this.musicRecommendationService.GetLastRecommendations().subscribe({
-      next: (result: SongSpotifyResponseModel[] ) => {
-        this.lastRecommendedSongs = result
-      }, error: (err)=> {
-        if (err.status != 423) {
-          console.log(err);
-        }
-      }
-    })
+    this.musicRecommendationService.GetLastRecommendations()
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((result: SongSpotifyResponseModel[]) => {
+          this.lastRecommendedSongs = result;
+        }),
+        catchError(() => {
+          this.toastr.info("To access your recommendation history, please subscribe.", undefined, {timeOut: 8000})
+          return of(undefined);
+        })
+      ).subscribe();
   }
 
   submit = (musicRecommendationForm: any) => {
@@ -57,23 +63,35 @@ export class MusicRecommendationComponent implements OnInit{
       SecondSongId: data.second_song_select,
     }
 
-    this.musicRecommendationService.GetRecommendationById(musicRecommendationRequest.FirstSongId, musicRecommendationRequest.SecondSongId).subscribe({
-      next: (data: SongSpotifyResponseModel[]) => {
-        this.listRecommendedSongs = data
-      }, error: (error: any) => console.log(error)
-    })
+    this.musicRecommendationService.GetRecommendationById(
+      musicRecommendationRequest.FirstSongId,
+      musicRecommendationRequest.SecondSongId)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((data: SongSpotifyResponseModel[]) => {
+          this.toastr.success("Recommendations received successfully.")
+          this.listRecommendedSongs = data;
+        }),
+        catchError(() => {
+          this.toastr.warning("Both songs must be selected.")
+          return of(undefined);
+        })
+      ).subscribe();
   }
 
   onInputChange(e: any, inputId: number) {
-    if(e.length >= 3) {
-      this.musicRecommendationService.GetSongBySearchString(e).subscribe({
-        next: (e: SongDbResponseModel[]) => {
-          if(inputId == 0) {
-            this.matchingFirstSongs = e
-          }
-          else this.matchingSecondSongs = e
-        }, error: (error: any) => console.log(error)
-      })
+    if(e.length == 3) {
+      this.musicRecommendationService.GetSongBySearchString(e)
+        .pipe(
+          takeUntil(this.unsubscribe$),
+          tap((e: SongDbResponseModel[]) => {
+            if(inputId == 0) this.matchingFirstSongs = e
+            else this.matchingSecondSongs = e
+          }),
+          catchError(() => {
+            return of(undefined)
+          })
+        ).subscribe();
     }
   }
 }

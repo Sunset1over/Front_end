@@ -14,7 +14,7 @@ import {SongSpotifyResponseModel} from "../models/song-spotify-response.model";
 export class MusicRecommendationService {
   private readonly api = environment.urlAddress;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient) {}
 
   GetSongBySearchString(songName: string): Observable<SongDbResponseModel[]> {
     const searchString = `${this.api}/api/Song?searchString=${songName}`;

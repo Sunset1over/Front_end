@@ -7,6 +7,7 @@ import {UserEditRequest} from "../models/user-edit-request.model";
 import {HeaderComponent} from "../../../shared/components/header/header/header.component";
 import {NgIf} from "@angular/common";
 import {ToastrService} from "ngx-toastr";
+import {catchError, of, Subject, takeUntil, tap} from "rxjs";
 
 @Component({
   selector: 'app-profile-edit',
@@ -23,6 +24,7 @@ export class ProfileEditComponent implements OnInit {
   editUserForm!: FormGroup;
   public isUserExists : boolean = false;
   public userInfo!: UserProfileModel;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private profileService: ProfileService,
               private router: Router,
@@ -41,12 +43,17 @@ export class ProfileEditComponent implements OnInit {
         [Validators.minLength(2)
         ])
     })
-    this.profileService.getUserProfile().subscribe({
-      next:(data:UserProfileModel) => {
-        this.isUserExists = true;
-        this.userInfo = data;
-      },
-    })
+    this.profileService.getUserProfile()
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((data: UserProfileModel) => {
+          this.isUserExists = true;
+          this.userInfo = data;
+        }),
+        catchError(() => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 
   validateControl = (controlName: string) => {
@@ -54,7 +61,10 @@ export class ProfileEditComponent implements OnInit {
   }
 
   cancel() : void{
-    this.router.navigate(["/profile"])
+    this.router.navigate(["/profile"]).then(
+      () => {},
+      () => {}
+    )
   }
 
   submit = (editUserFormValue:any) => {
@@ -68,18 +78,19 @@ export class ProfileEditComponent implements OnInit {
       lastName: info.lastname,
     }
 
-    this.profileService.editUserProfile(userObject).subscribe({
-      next:() => {
-        this.toastr.success("Profile update successfully.")
-        this.router.navigate(["/profile"])
-      },
-      error: error => {
-        if (error.error instanceof ErrorEvent) {
-          console.log('An error occurred:', error.error.message);
-        } else {
-          console.log(`Server returned code ${error.status}, error message is: ${error.error}`);
-        }
-      }
-    });
+    this.profileService.editUserProfile(userObject)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap(() => {
+          this.toastr.success("Profile update successfully.")
+          this.router.navigate(["/profile"]).then(
+            () => {},
+            () => {}
+          )
+        }),
+        catchError(() => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 }

@@ -10,6 +10,7 @@ import { HeaderComponent } from "../../../shared/components/header/header/header
 import { ProductResponse } from "../models/ProductResponse";
 import { NgForOf } from "@angular/common";
 import {ToastrService} from "ngx-toastr";
+import {catchError, of, Subject, takeUntil, tap} from "rxjs";
 
 @Component({
   selector: 'app-paypal',
@@ -26,6 +27,7 @@ import {ToastrService} from "ngx-toastr";
 export class PaypalComponent implements OnInit {
   PaymentForm!: FormGroup;
   ProductSubscription!: ProductResponse[];
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private paymentService: PayPalService,
               private router: Router,
@@ -82,7 +84,7 @@ export class PaypalComponent implements OnInit {
         }
       }, (tokenizeErr: any, response: { creditCards: { nonce: any; }[]; }) => {
         if (tokenizeErr) {
-          console.error(tokenizeErr);
+          this.toastr.error(tokenizeErr);
           return;
         }
 
@@ -91,36 +93,46 @@ export class PaypalComponent implements OnInit {
           ProductId: productId
         };
 
-        this.paymentService.Create(paymentRequest).subscribe({
-          next: (paymentResponse) => {
-            if (!paymentResponse.empty) {
-              this.toastr.success("Payment successful.")
-              this.router.navigate(["/profile"])
-            }
-            else {
-              this.toastr.error("Check the data is correct")
-            }
-          },
-          error: (err) => {
-            if(err.status == 423){
-              this.toastr.warning("Subscription already exists");
-            }
-          }
-        });
+        this.paymentService.Create(paymentRequest)
+          .pipe(
+            takeUntil(this.unsubscribe$),
+            tap((paymentResponse) => {
+              if(!paymentResponse.empty) {
+                this.toastr.success("Payment successful.")
+                this.router.navigate(["/profile"]).then(
+                  () => {},
+                  () => {}
+                )
+              }
+            }),
+            catchError((err) => {
+              if(err.status == 400) this.toastr.error("Check the data is correct")
+              if(err.status == 423) this.toastr.info("Subscription already exists");
+              return of(undefined)
+            })
+          ).subscribe();
       });
     });
   }
 
   GetAllProducts() {
-    this.paymentService.GetProduct().subscribe({
-      next: (productResponse: ProductResponse[]) => {
-        this.ProductSubscription = productResponse;
-      }
-    });
+    this.paymentService.GetProduct()
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((productResponse: ProductResponse[]) => {
+          this.ProductSubscription = productResponse;
+        }),
+        catchError(() => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 
   cancel(): void {
-    this.router.navigate(["/profile"]);
+    this.router.navigate(["/profile"]).then(
+      () => {},
+      () => {}
+    );
   }
 
   formatExpirationDate(date: string): string {
@@ -130,7 +142,3 @@ export class PaypalComponent implements OnInit {
     return `${month}/${year.slice(2)}`;
   }
 }
-
-//number: "4111111111111111"
-//expirationDate: "10/20"
-//cvv: "123"

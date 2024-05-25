@@ -8,6 +8,8 @@ import {HeaderComponent} from "../../../shared/components/header/header/header.c
 import {SubscriptionStatisticResponseModel} from "../models/SubscriptionStatisticResponse.model";
 import {RecommendationStatisticResponseModel} from "../models/RecommendationStatisticResponse.model";
 import {FormsModule} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
+import {catchError, of, Subject, takeUntil, tap} from "rxjs";
 
 @Component({
   selector: 'app-statistic',
@@ -21,11 +23,11 @@ import {FormsModule} from "@angular/forms";
 })
 export class StatisticComponent implements OnInit{
   public chart: any;
-  public today: string;
   protected currentRequest: StatisticRequestModel;
+  private unsubscribe$ = new Subject<void>();
 
-  constructor(private statisticService: StatisticService) {
-    this.today = formatDate(new Date(), 'YYYY-MM-dd', 'en');
+  constructor(private statisticService: StatisticService,
+              private toastr: ToastrService) {
     this.currentRequest = {
       DateFrom: formatDate(new Date(), 'YYYY-MM-dd', 'en'),
       DateTo: formatDate(new Date(), 'YYYY-MM-dd', 'en')
@@ -57,12 +59,12 @@ export class StatisticComponent implements OnInit{
 
   onDateChange(): void {
     if (!this.currentRequest.DateFrom || !this.currentRequest.DateTo) {
-      alert('Both dates must be selected');
+      this.toastr.warning('Both dates must be selected');
       return;
     }
 
     if (this.currentRequest.DateFrom > this.currentRequest.DateTo) {
-      alert('"From" date cannot be later than "To" date');
+      this.toastr.warning('"From" date cannot be later than "To" date');
       return;
     }
 
@@ -89,36 +91,45 @@ export class StatisticComponent implements OnInit{
   }
 
   loadLoginStatistics(): void {
-    this.statisticService.GetLoginStatistic(this.currentRequest).subscribe(
-      (response: LoginStatisticResponseModel) => {
-        this.createChart(response);
-      },
-      (error) => {
-        console.error('Failed to retrieve login statistics', error);
-      }
-    );
+    this.statisticService.GetLoginStatistic(this.currentRequest)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((response: LoginStatisticResponseModel) => {
+          this.createChart(response);
+        }),
+        catchError(() => {
+          this.toastr.error("Failed to retrieve login statistics")
+          return of(undefined)
+        })
+      ).subscribe();
   }
 
   loadUserInfoStatistics(): void {
-    this.statisticService.GetUserInfoStatistic(this.currentRequest).subscribe(
-      (response: SubscriptionStatisticResponseModel) => {
-        this.createUserInfoChart(response);
-      },
-      (error) => {
-        console.error('Failed to retrieve user info statistics', error);
-      }
-    );
+    this.statisticService.GetUserInfoStatistic(this.currentRequest)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((response: SubscriptionStatisticResponseModel) => {
+          this.createUserInfoChart(response);
+        }),
+        catchError(() => {
+          this.toastr.error("Failed to retrieve user info statistics")
+          return of(undefined)
+        })
+      ).subscribe();
   }
 
   loadRecommendationStatistics(): void {
-    this.statisticService.GetRecommendationInfo(this.currentRequest).subscribe(
-      (response: RecommendationStatisticResponseModel) => {
-        this.createRecommendationChart(response);
-      },
-      (error) => {
-        console.error('Failed to retrieve recommendation statistics', error);
-      }
-    );
+    this.statisticService.GetRecommendationInfo(this.currentRequest)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap((response: RecommendationStatisticResponseModel) => {
+          this.createRecommendationChart(response);
+        }),
+        catchError(() => {
+          this.toastr.error("Failed to retrieve recommendation statistics")
+          return of(undefined)
+        })
+      ).subscribe();
   }
 
   createChart(data: LoginStatisticResponseModel): void {
@@ -134,12 +145,12 @@ export class StatisticComponent implements OnInit{
     ]);
   }
 
-   createUserInfoChart(data: SubscriptionStatisticResponseModel): void {
+  createUserInfoChart(data: SubscriptionStatisticResponseModel): void {
     if (!data) return;
 
     const labels = data.monthlyCounts.map(item => formatDate(item.dateFrom, 'YYYY-MM-dd', 'en'));
     const count = data.monthlyCounts.map(item => item.count);
-     const totalAmount = data.monthlyCounts.map(item => item.totalAmount);
+    const totalAmount = data.monthlyCounts.map(item => item.totalAmount);
 
     this.renderChart(labels, [
       { label: 'count', data: count, backgroundColor: 'orange' },
@@ -147,7 +158,7 @@ export class StatisticComponent implements OnInit{
     ]);
   }
 
-   createRecommendationChart(data: RecommendationStatisticResponseModel): void {
+  createRecommendationChart(data: RecommendationStatisticResponseModel): void {
     if (!data) return;
 
     const labels = data.monthlyCounts.map(item => formatDate(item.dateFrom, 'YYYY-MM-dd', 'en'));
@@ -159,9 +170,8 @@ export class StatisticComponent implements OnInit{
   }
 
   renderChart(labels: string[], datasets: any[]): void {
-    if (this.chart) {
-      this.chart.destroy();
-    }
+    if (this.chart) this.chart.destroy();
+
 
     this.chart = new Chart('MyChart', {
       type: 'bar',

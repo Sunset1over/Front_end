@@ -8,6 +8,7 @@ import {HeaderComponent} from "../../../shared/components/header/header/header.c
 
 import {NgIf} from "@angular/common";
 import {ToastrService} from "ngx-toastr";
+import {catchError, of, Subject, takeUntil, tap} from "rxjs";
 
 @Component({
   selector: 'app-profile-edit-password',
@@ -22,6 +23,7 @@ import {ToastrService} from "ngx-toastr";
 })
 export class ProfileEditPasswordComponent implements OnInit {
   editUserForm!: FormGroup;
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private profileService: ProfileService,
               private router: Router,
@@ -35,12 +37,16 @@ export class ProfileEditPasswordComponent implements OnInit {
         ])
     })
   }
+
   validateControl = (controlName: string) => {
     return this.editUserForm.get(controlName)?.invalid && this.editUserForm.get(controlName)?.touched
   }
 
   cancel() : void{
-    this.router.navigate(["/profile"])
+    this.router.navigate(["/profile"]).then(
+      () => {},
+      () => {}
+    )
   }
 
   submit = (editUserFormValue:any) => {
@@ -51,18 +57,19 @@ export class ProfileEditPasswordComponent implements OnInit {
       newPassword: info.newPassword
     }
 
-    this.profileService.editUserPassword(passwordObject).subscribe({
-      next: () => {
-        this.toastr.success("Password update successfully.")
-        this.router.navigate(["/profile"])
-      },
-      error: error => {
-        if (error.error instanceof ErrorEvent) {
-          console.log('An error occurred:', error.error.message);
-        } else {
-          console.log(`Server returned code ${error.status}, error message is: ${error.error}`);
-        }
-      }
-    });
+    this.profileService.editUserPassword(passwordObject)
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        tap(() => {
+          this.toastr.success("Password update successfully.")
+          this.router.navigate(["/profile"]).then(
+            () => {},
+            () => {}
+          )
+        }),
+        catchError(() => {
+          return of(undefined)
+        })
+      ).subscribe();
   }
 }
