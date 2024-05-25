@@ -1,6 +1,15 @@
 {
   "header": {
-    "admin": "Admin"
-
+    "admin": "Admin",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "profile": {
+    "change_avatar": "Change Avatar",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "user_name": "Username",
+    "email": "Email",
+    "subscription": "Subscription"
   }
 }

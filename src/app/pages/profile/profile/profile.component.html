@@ -7,7 +7,7 @@
         <img [src]="UserPhotoUrl" alt="User Avatar" class="user-avatar">
         <form [formGroup]="changeAvatar" novalidate (ngSubmit)="submit($event)">
           <input type="file" formControlName="avatar" (change)="onFileSelected($event)" accept="image/*" class="file-input"/>
-          <button type="submit" class="btn btn-avatar">Change Avatar</button>
+          <button type="submit" class="btn btn-avatar">{{'profile.change_avatar' | translate}}</button>
         </form>
       </div>
     </div>
@@ -15,27 +15,34 @@
     <div class="user-profile-center">
       <div class="personal-data">
         <div class="block">
-          <span class="first-line">First Name:</span>
+          <span class="first-line">{{'profile.first_name' | translate}}:</span>
           <span class="second-line">{{userInfo.firstName}}</span>
         </div>
         <div class="block">
-          <span class="first-line">Last Name:</span>
+          <span class="first-line">{{'profile.last_name' | translate}}:</span>
           <span class="second-line">{{userInfo.lastName}}</span>
         </div>
         <div class="block">
-          <span class="first-line">Username:</span>
+          <span class="first-line">{{'profile.user_name' | translate}}:</span>
           <span class="second-line">{{userInfo.userName}}</span>
         </div>
         <div class="block">
-          <span class="first-line">Email:</span>
+          <span class="first-line">{{'profile.email' | translate}}:</span>
           <span class="second-line">{{userInfo.email}}</span>
+        </div>
+        <div class="block" *ngIf="userInfo.subscription">
+          <span class="first-line">{{'profile.subscription' | translate}}:</span>
+          <span class="second-line">User has a subscription</span>
+        </div>
+        <div *ngIf="!userInfo.subscription">
+          <span class="second-line">User does not have a subscription</span>
         </div>
       </div>
     </div>
 
     <div class="user-profile-right">
       <div class="buttons">
-        <button class="btn btn-primary" [routerLink]="['/payer-page']">Subscription</button>
+        <button class="btn btn-primary" [routerLink]="['/payer-page']">{{'profile.subscription' | translate}}</button>
         <button class="btn btn-primary" (click)="editUserAccount()">Edit Account</button>
         <button class="btn btn-primary" (click)="editPasswordAccount()">Change Password</button>
         <button class="btn btn-danger" (click)="deleteUserAccount()">Delete Account</button>

@@ -8,6 +8,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {UserPhotoModel} from "../models/user-photo.model";
 import {catchError, of, Subject, takeUntil, tap} from "rxjs";
 import {ToastrService} from "ngx-toastr";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-profile',
@@ -16,7 +17,8 @@ import {ToastrService} from "ngx-toastr";
     HeaderComponent,
     NgIf,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    TranslateModule
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
@@ -45,6 +47,7 @@ export class ProfileComponent implements OnInit{
       .pipe(
         takeUntil(this.unsubscribe$),
         tap((data: UserProfileModel) => {
+          console.log(data);
           this.isUserExists = true;
           this.userInfo = data;
           this.initializeUserPhoto();

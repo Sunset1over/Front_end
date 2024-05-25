@@ -1,5 +1,15 @@
 {
   "header": {
-    "admin": "Адмін панель"
+    "admin": "Адмін панель",
+    "profile": "Профіль",
+    "logout": "Вийти"
+  },
+  "profile": {
+    "change_avatar": "Змінити фото",
+    "first_name": "Ім'я",
+    "last_name": "Прізвище",
+    "user_name": "Ім'я користувача",
+    "email": "Пошта",
+    "subscription": "Підписка"
   }
 }

@@ -1,4 +1,6 @@
 import {UserPhotoModel} from "./user-photo.model";
+import {SubscriptionResponseModel} from "./SubscriptionResponse.model";
+
 
 export interface UserProfileModel{
   id: string,
@@ -9,4 +11,5 @@ export interface UserProfileModel{
   firstName : string;
   lastName : string;
   photo?: UserPhotoModel | null
+  subscription?: SubscriptionResponseModel
 }

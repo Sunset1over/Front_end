@@ -7,15 +7,15 @@
         </a>
         <span class="program-name">MelodyFusion</span>
       </div>
-      <div class="language-container">
-        <a class="language white" (click)="setCulture('uk')">uk</a>
-        <a class="language white" (click)="setCulture('en')">en</a>
-      </div>
       <div class="profile">
+        <div class="language-container">
+          <a class="language white" (click)="setCulture('uk')">uk</a>
+          <a class="language white" (click)="setCulture('en')">en</a>
+        </div>
         <a routerLink="/music-recommendation" routerLinkActive="active-link">Home</a>
-        <a routerLink="/profile" routerLinkActive="active-link">Profile</a>
+        <a routerLink="/profile" routerLinkActive="active-link">{{'header.profile' | translate}}</a>
         <a *ngIf="isAdmin" routerLink="/admin-panel" routerLinkActive="active-link">{{'header.admin' | translate}}</a>
-        <a (click)="logout()" routerLink="/login">Logout <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon></a>
+        <a (click)="logout()" routerLink="/login">{{'header.logout' | translate}}<fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon></a>
       </div>
     </div>
   </div>
