@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../../environments/environment.prod";
 import {HttpClient} from "@angular/common/http";
-import {CookieService} from "ngx-cookie-service";
 import {Observable} from "rxjs";
 import {SongDbResponseModel} from "../models/song-db-response.model";
 import {SongSpotifyResponseModel} from "../models/song-spotify-response.model";

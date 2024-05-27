@@ -26,7 +26,7 @@ export class UserService {
     return this.cookieService.get('culture');
   }
 
-  logout(){
+  public logout(){
     this.cookieService.deleteAll();
   }
 
