@@ -20,6 +20,8 @@ describe('HeaderComponent', () => {
   let library: FaIconLibrary;
   let reloadService: jasmine.SpyObj<ReloadService>;
 
+  const userInformationSpy = jasmine.createSpyObj<UserInformationCollectorService>('UserInformationCollectorService', ['userInfo', 'token'], );
+
   beforeEach(async () => {
     const userServiceSpy = jasmine.createSpyObj('UserService', ['logout', 'isAuthenticated']);
     const cookieServiceSpy = jasmine.createSpyObj('CookieService', ['set', 'get', 'deleteAll']);
@@ -35,7 +37,7 @@ describe('HeaderComponent', () => {
         { provide: UserService, useValue: userServiceSpy },
         { provide: CookieService, useValue: cookieServiceSpy },
         { provide: ReloadService, useValue: reloadServiceSpy },
-        UserInformationCollectorService,
+        { provide: UserInformationCollectorService, useValue: userInformationSpy },
         FaIconLibrary,
         HeaderComponent,
         { provide: ActivatedRoute, useValue: { params: of({}) } },
@@ -46,6 +48,9 @@ describe('HeaderComponent', () => {
     component = fixture.componentInstance;
     userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
     userInformation = TestBed.inject(UserInformationCollectorService);
+
+    // userInformationSpy = TestBed.inject(UserInformationCollectorService) as jasmine.SpyObj<UserInformationCollectorService>;
+
     cookieService = TestBed.inject(CookieService) as jasmine.SpyObj<CookieService>;
     library = TestBed.inject(FaIconLibrary);
     reloadService = TestBed.inject(ReloadService) as jasmine.SpyObj<ReloadService>;
@@ -57,8 +62,13 @@ describe('HeaderComponent', () => {
   });
 
   it('should return false if user is not admin', () => {
-    spyOnProperty(userInformation, 'userInfo', 'get').and.returnValue({ role: ['User'] });
+    userInformationSpy.userInfo.and.returnValue({ role: ['User'] });
     expect(component.isAdmin).toBeFalse();
+  });
+
+  it('should return true if user is admin', () => {
+    userInformationSpy.userInfo.and.returnValue({ role: ['Admin'] });
+    expect(component.isAdmin).toBeTrue();
   });
 
   it('should set culture and reload the window', () => {

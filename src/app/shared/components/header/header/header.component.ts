@@ -21,7 +21,6 @@ import { ReloadService } from '../../../services/reload.service';
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
-  providers: [UserInformationCollectorService, UserService],
 })
 export class HeaderComponent {
   constructor(
@@ -35,8 +34,10 @@ export class HeaderComponent {
   }
 
   public get isAdmin() {
-    if (this.userInformation.userInfo) {
-      for (let role of this.userInformation.userInfo.role) {
+    const userInfo = this.userInformation.userInfo();
+
+    if (userInfo) {
+      for (let role of userInfo.role) {
         if (role == 'Admin') return true;
       }
     }

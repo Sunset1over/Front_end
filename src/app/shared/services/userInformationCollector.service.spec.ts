@@ -34,7 +34,7 @@ describe("UserInformationCollectorService", () => {
     userService.isAuthenticated.and.returnValue(true);
     cookieService.get.and.returnValue(JSON.stringify(mockUser));
 
-    expect(service.userInfo).toEqual(mockUser);
+    expect(service.userInfo()).toEqual(mockUser);
     expect(userService.isAuthenticated).toHaveBeenCalled();
     expect(cookieService.get).toHaveBeenCalledWith("user");
   });
@@ -42,7 +42,7 @@ describe("UserInformationCollectorService", () => {
   it("should return null if not authenticated", () => {
     userService.isAuthenticated.and.returnValue(false);
 
-    expect(service.userInfo).toBeNull();
+    expect(service.userInfo()).toBeNull();
     expect(userService.isAuthenticated).toHaveBeenCalled();
     expect(cookieService.get).not.toHaveBeenCalledWith("user");
   });
